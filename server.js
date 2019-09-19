@@ -1,14 +1,25 @@
-// WEB SERVER ***(SFRUTTA NODE E EXPRESS)***
-const express = require('express');
-const app = express();
+const https = require('https');
+const fs = require('fs');
 
-app.listen(4444, function(){
-    console.log("Il server è in ascolto sulla porta 4444");
-})
+const options = {
+  key: fs.readFileSync('privkey.pem'),
+  cert: fs.readFileSync('pubcert.pem')
+};
 
-app.use(express.static('public')); 
+/*
+https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(8000);
+*/
 
-//********************* */ GET / (root - contiene la mappa OSM/Leaflet quindi index.html) *************************
-app.get('/', function (req, res) {
-    res.sendfile('index.html'); // utilizza il file index.html come template della visivo della pagina
+fs.readFile('./index.html', function (err, html) {
+    if (err) {
+        throw err; 
+    }       
+    https.createServer(options, function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(8000);
 });
