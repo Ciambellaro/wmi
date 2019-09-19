@@ -11,7 +11,11 @@
 	crossorigin=""/>
 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
    	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-   	crossorigin=""></script>   
+   	crossorigin=""></script>
+   	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+   	<script src="js/leaflet.awesome-markers.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
+	<script type="text/javascript" src="https://raw.github.com/mapbox/leaflet-knn/master/leaflet-knn.min.js"></script>
 
 	<style>
 		#map {
@@ -43,6 +47,7 @@
 
 		var map = L.map('map').fitWorld();
 		var layerGroup = L.layerGroup().addTo(map);
+		var location;
 
 		//carica e inizializza la mappa base
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -54,8 +59,9 @@
 
 		function onLocationFound(e) {
 			layerGroup.clearLayers(); //cancella i precedenti markers e circles
-			
+
 			var radius = e.accuracy / 2;
+			location = e.latlng;
 
 			//var marker = L.marker(e.latlng).addTo(map)
 
@@ -68,6 +74,11 @@
 			marker.bindPopup("Ti trovi qui in un raggio di " + radius + " metri").openPopup();
 
 			//L.circle(e.latlng, radius).addTo(map);
+
+			//+++GET NEARBY PLACES+++
+			var gj = L.geoJson(GEOJSON_DATA);
+			var nearest = leafletKnn(gj).nearest(L.latLng(location[0], location[1]), 5);
+			console.log(nearest);
 		}
 
 		function onLocationError(e) {
