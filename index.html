@@ -13,10 +13,7 @@
    	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
    	crossorigin=""></script>
    	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
-   	<script src="js/leaflet.awesome-markers.js"></script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
-	<script type="text/javascript" src="https://raw.github.com/mapbox/leaflet-knn/master/leaflet-knn.min.js"></script>
-
 	<style>
 		#map {
 			width: 60%;
@@ -47,7 +44,7 @@
 
 		var map = L.map('map').fitWorld();
 		var layerGroup = L.layerGroup().addTo(map);
-		var location;
+		var position;
 
 		//carica e inizializza la mappa base
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -57,11 +54,13 @@
 			accessToken: 'pk.eyJ1IjoiaXBlenp1IiwiYSI6ImNrMG54Ym1rZjA0OWszbm8weTlyNGlnd3cifQ.Ra3q6EDY1jvEeGFFcFHdAQ'
 		}).addTo(map);
 
+
 		function onLocationFound(e) {
 			layerGroup.clearLayers(); //cancella i precedenti markers e circles
 
 			var radius = e.accuracy / 2;
-			location = e.latlng;
+			position = e.latlng;
+			console.log(position.lat);
 
 			//var marker = L.marker(e.latlng).addTo(map)
 
@@ -76,19 +75,57 @@
 			//L.circle(e.latlng, radius).addTo(map);
 
 			//+++GET NEARBY PLACES+++
+			/*
 			var gj = L.geoJson(GEOJSON_DATA);
-			var nearest = leafletKnn(gj).nearest(L.latLng(location[0], location[1]), 5);
+			var nearest = leafletKnn(gj).nearest(L.latLng(position[0], position[1]), 5);
 			console.log(nearest);
+			*/
+
+			//return position;
+			//initialize();
 		}
 
 		function onLocationError(e) {
 			alert(e.message);
 		}
 
+		/*
+		//FUNZIONI DI GOOGLE MAPS PER LOCALIZZARE I NEARBY PLACES
+		function initialize() {
+			console.log("in init: " + position.lat);
+			var pyrmont = new google.maps.LatLng({lat: position.lat, lng: position.lng});
+
+			var request = {
+				location: pyrmont,
+			    radius: '500',
+			    type: ['restaurant']
+			};
+
+			service = new google.maps.places.PlacesService(document.createElement('div'));
+			service.nearbySearch(request, callback);
+		}
+
+		function callback(results, status) {
+			if (status == google.maps.places.PlacesServiceStatus.OK) {
+		  		for (var i = 0; i < results.length; i++) {
+		    		var nearbyMarker = L.marker([results[0].geometry.location.lat(),results[0].geometry.location.lng()]);
+		    		nearbyMarker.addTo(layerGroup);
+		    	}
+		  	}
+		}
+		*/
+
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
 
+		//var bbox = map.getView().calculateExtent(olmap.getSize());
+		//console.log(bbox);
+
+		//LOCALIZZA LA POSIZIONE
 		map.locate({setView: true, watch: true, maxZoom: 16});
+		
+		
+
 
 
 
