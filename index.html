@@ -14,6 +14,7 @@
    	crossorigin=""></script>
    	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<style>
 		#map {
 			width: 60%;
@@ -83,6 +84,17 @@
 
 			//return position;
 			//initialize();
+
+			$.ajax({
+        		type: "GET",
+        		dataType: "jsonp",
+        		//url: "http://overpass-api.de/api/interpreter?data=[out:json];(node(11.254528,44.477110,11.282208,44.488576);<;);out meta;",
+        		url: "http://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
+        		success: function(data){
+                    console.log("ENTRATO!");
+        		}
+    		})
+
 		}
 
 		function onLocationError(e) {
