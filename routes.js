@@ -25,10 +25,10 @@ module.exports = {
  
         switch (path) {
             case '/':
-                html.render('./index.html', response);
+                html.render('./login.html', response);
                 break;
-            case '/about':
-                html.render('./about.html', response);
+            case '/map':
+                html.render('./index.html', response);
                 break;
             default:
                 response.writeHead(404);
