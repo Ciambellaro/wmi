@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Where Am I</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-	crossorigin=""/>
-	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
-   	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
-   	crossorigin=""></script>
-   	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-	<style>
-		#map {
-			width: 60%;
-		}
-	</style>
-	<script type="text/javascript" src="java.js"></script>
-</head>
-<body>
-	<!--
-	<div class="embed-responsive embed-responsive-1by1">
-    	<iframe class="embed-responsive-item" width="600" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=-16.127929687500004%2C28.497660832963472%2C39.41894531250001%2C51.481382896100975&amp;layer=mapnik" style="border: 1px solid black"></iframe>
-	</div>
-	-->
-
-	<div class="d-flex justify-content-center">
-		<div id="map" class="embed-responsive embed-responsive-1by1"></div>
-	</div>
-	
-
-</body>
-   	<script>
-		//var map = L.map('mymap').setView([43.1045, 12.3895], 13);
+//var map = L.map('mymap').setView([43.1045, 12.3895], 13);
 		 
 		
 		/*
@@ -136,11 +98,3 @@
 
 		//LOCALIZZA LA POSIZIONE
 		map.locate({setView: true, watch: true, maxZoom: 16});
-		
-		
-
-
-
-
-	</script>
-</html>
