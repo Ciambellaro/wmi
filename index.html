@@ -12,7 +12,7 @@
 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
    	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
    	crossorigin=""></script>
-   	<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+   	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<style>
@@ -62,7 +62,7 @@
 
 			var radius = e.accuracy / 2;
 			position = e.latlng;
-			console.log(position.lat);
+			//console.log(position.lat);
 
 			//var marker = L.marker(e.latlng).addTo(map)
 
@@ -85,14 +85,22 @@
 
 			//return position;
 			//initialize();
+			bounds = map.getBounds(); //posizioni latlong per BBox
+			c1lat = bounds._northEast.lat;
+			c1lng = bounds._northEast.lng;
+			c2lat = bounds._southWest.lat;
+			c2lng = bounds._southWest.lng;
+			urlOverpass = "https://overpass-api.de/api/interpreter?data=[out:json];(node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");way['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");<;);out meta;";
 
 			$.ajax({
         		type: "GET",
-        		dataType: "jsonp",
-        		//url: "http://overpass-api.de/api/interpreter?data=[out:json];(node(11.254528,44.477110,11.282208,44.488576);<;);out meta;",
-        		url: "http://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
+        		dataType: "json",
+        		url: urlOverpass,
+        		//url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
         		success: function(data){
                     console.log("ENTRATO!");
+                    console.log(urlOverpass);
+                    //console.log(map.getBounds());
         		}
     		})
 
