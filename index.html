@@ -15,6 +15,7 @@
    	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sbygkyz2S6b2m8-q6Gzfa9BrTTygtkE&libraries=places"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://kit.fontawesome.com/c921eec793.js" crossorigin="anonymous"></script>
 	<style>
 		#map {
 			width: 60%;
@@ -91,15 +92,37 @@
 			c2lng = bounds._southWest.lng;
 			urlOverpass = "https://overpass-api.de/api/interpreter?data=[out:json];(node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");way['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");<;);out meta;";
 
+			//var orangeMarker = L.AwesomeMarkers.icon({markerColor: 'orange'});
+
 			$.ajax({
         		type: "GET",
         		dataType: "json",
         		url: urlOverpass,
         		//url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
         		success: function(data){
+        			//data = JSON.parse(data);
                     console.log("ENTRATO!");
-                    console.log(urlOverpass);
-                    //console.log(map.getBounds());
+                    //console.log(urlOverpass);
+                    if (data.elements.length != 0) {
+
+                    	$.each(data.elements, function(index, el) {
+        					console.log(el);
+							if (el.tags) {
+								if (el.tags.name) {
+									console.log(el.tags.name);
+									//creazione del marker per ogni singolo punto di interesse
+        							var markerLocation = new L.LatLng(el.lat, el.lon);
+        							var marker = L.marker(markerLocation);
+									marker.addTo(layerGroup);
+									marker.bindPopup("Questo posto e': " + el.tags.name).openPopup();
+								}
+							}
+    					});
+    					
+                    } else {
+                    	console.log("nessun risultato trovato");
+                    }
+                    
         		}
     		})
 
@@ -142,7 +165,7 @@
 		//console.log(bbox);
 
 		//LOCALIZZA LA POSIZIONE
-		map.locate({setView: true, watch: true, maxZoom: 16});
+		map.locate({setView: true, watch: true, maxZoom: 14});
 		
 		
 
