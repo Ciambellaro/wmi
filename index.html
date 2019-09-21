@@ -21,7 +21,6 @@
 			width: 60%;
 		}
 	</style>
-	<script type="text/javascript" src="java.js"></script>
 </head>
 <body>
 	<!--
@@ -48,6 +47,7 @@
 		var map = L.map('map').fitWorld();
 		var layerGroup = L.layerGroup().addTo(map);
 		var position;
+		var count = 0;
 
 		//carica e inizializza la mappa base
 		L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -86,46 +86,6 @@
 
 			//return position;
 			//initialize();
-			bounds = map.getBounds(); //posizioni latlong per BBox
-			c1lat = bounds._northEast.lat;
-			c1lng = bounds._northEast.lng;
-			c2lat = bounds._southWest.lat;
-			c2lng = bounds._southWest.lng;
-			urlOverpass = "https://overpass-api.de/api/interpreter?data=[out:json];(node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");way['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");<;);out meta;";
-
-			//var orangeMarker = L.AwesomeMarkers.icon({markerColor: 'orange'});
-
-			$.ajax({
-        		type: "GET",
-        		dataType: "json",
-        		url: urlOverpass,
-        		//url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
-        		success: function(data){
-        			//data = JSON.parse(data);
-                    console.log("ENTRATO!");
-                    //console.log(urlOverpass);
-                    if (data.elements.length != 0) {
-
-                    	$.each(data.elements, function(index, el) {
-        					console.log(el);
-							if (el.tags) {
-								if (el.tags.name) {
-									console.log(el.tags.name);
-									//creazione del marker per ogni singolo punto di interesse
-        							var markerLocation = new L.LatLng(el.lat, el.lon);
-        							var marker = L.marker(markerLocation);
-									marker.addTo(layerGroup);
-									marker.bindPopup("Questo posto e': " + el.tags.name).openPopup();
-								}
-							}
-    					});
-    					
-                    } else {
-                    	console.log("nessun risultato trovato");
-                    }
-                    
-        		}
-    		})
 
 		}
 
@@ -161,6 +121,52 @@
 
 		map.on('locationfound', onLocationFound);
 		map.on('locationerror', onLocationError);
+
+		map.on('moveend', function(e) {
+   			bounds = map.getBounds(); //posizioni latlong per BBox
+			c1lat = bounds._northEast.lat;
+			c1lng = bounds._northEast.lng;
+			c2lat = bounds._southWest.lat;
+			c2lng = bounds._southWest.lng;
+			urlOverpass = "https://overpass-api.de/api/interpreter?data=[out:json];(node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");way['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");node['tourism']("+ c2lat + "," + c2lng + "," + c1lat + "," + c1lng+");<;);out meta;";
+
+			//var orangeMarker = L.AwesomeMarkers.icon({markerColor: 'orange'});
+
+			$.ajax({
+        		type: "GET",
+        		dataType: "json",
+        		url: urlOverpass,
+        		//url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
+        		success: function(data){
+        			//data = JSON.parse(data);
+                    count += 1;
+                    console.log("richiesta overpass #" + count);
+                    //console.log(urlOverpass);
+                    if (data.elements.length != 0) {
+                    	var exceed = 0;
+                    	$.each(data.elements, function(index, el) {
+        					console.log(el);
+							if (el.tags) {
+								if (el.tags.name) {
+									exceed += 1;
+									if (exceed > 30) {return false;}
+									console.log(el.tags.name);
+									//creazione del marker per ogni singolo punto di interesse
+        							var markerLocation = new L.LatLng(el.lat, el.lon);
+        							var marker = L.marker(markerLocation);
+									marker.addTo(layerGroup);
+									marker.bindPopup("Questo posto e': " + el.tags.name);
+
+								}
+							}
+    					});	
+                    } else {
+                    	console.log("nessun risultato trovato");
+                    }
+                    
+        		}
+    		});
+		});
 
 		//var bbox = map.getView().calculateExtent(olmap.getSize());
 		//console.log(bbox);
