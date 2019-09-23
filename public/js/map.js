@@ -11,6 +11,8 @@ var layerGroupPos = L.layerGroup().addTo(map);
 //var layerRoute = L.layerGroup().addTo(map);
 var position;
 var count = 0;
+var editing = false;
+var routes = []; 
 
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -58,7 +60,28 @@ function onLocationError(e) {
 }
 
 function addRoute() {
-    alert("cazzo");
+    if (!editing) {
+        alert("modalità edit attivata");
+        editing = true;
+        routes = [position];
+        document.getElementById("createRoute").className = "btn btn-success btn-circle btn-lg";
+        document.getElementById("routeIcon").className = "glyphicon glyphicon-ok";
+
+
+    } else {
+        alert("modalità edit disattivata");
+        editing = false;
+
+        L.Routing.control({
+            waypoints: routes,
+            createMarker: function() { return null; }
+        }).addTo(map);
+
+        document.getElementById("createRoute").className = "btn btn-warning btn-circle btn-lg";
+        document.getElementById("routeIcon").className = "glyphicon glyphicon-road";
+
+
+    }
 }
 
 /*
@@ -135,12 +158,16 @@ map.on('moveend', function(e) {
                             var marker = L.marker(markerLocation, {
                                 icon: redMarker
                             });
-                            marker.addTo(layerGroup);
+
+                            marker.addTo(layerGroup).on('click', function(e) {
+                                if (editing) {
+                                    routes.push(markerLocation);
+                                }
+                            });
 
                             var tags = el.tags;
 
                             console.log("marker #" + exceed);
-                            
 
                             marker.bindPopup("Questo posto e': " + el.tags.name + '\n');
 
@@ -158,21 +185,11 @@ map.on('moveend', function(e) {
 //var bbox = map.getView().calculateExtent(olmap.getSize());
 //console.log(bbox);
 
+
 //LOCALIZZA LA POSIZIONE
 map.locate({
     setView: true,
     watch: true,
     maxZoom: 14
 });
-
-
-
-/*
-L.Routing.control({
-  waypoints: [
-    L.latLng(44.486568, 11.270229),
-    L.latLng(44.484099, 11.281602)
-  ]
-}).addTo(map);
-*/
 
