@@ -7,6 +7,7 @@ var OSM_layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 */
 var map = L.map('map').fitWorld();
 var layerGroup = L.layerGroup().addTo(map);
+var layerGroupPos = L.layerGroup().addTo(map);
 var position;
 var count = 0;
 
@@ -20,8 +21,8 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 
 function onLocationFound(e) {
-    layerGroup.clearLayers(); //cancella i precedenti markers e circles
 
+    layerGroupPos.clearLayers();
     var radius = e.accuracy / 2;
     position = e.latlng;
     //console.log(position.lat);
@@ -29,12 +30,13 @@ function onLocationFound(e) {
     //var marker = L.marker(e.latlng).addTo(map)
 
     var marker = L.marker(e.latlng)
-    marker.addTo(layerGroup);
+    marker.addTo(layerGroupPos);
 
     var circle = L.circle(e.latlng, radius);
-    circle.addTo(layerGroup);
+    circle.addTo(layerGroupPos);
 
     marker.bindPopup("Ti trovi qui in un raggio di " + radius + " metri").openPopup();
+
 
     //L.circle(e.latlng, radius).addTo(map);
 
@@ -84,6 +86,7 @@ map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 map.on('moveend', function(e) {
+    layerGroup.clearLayers();
     bounds = map.getBounds(); //posizioni latlong per BBox
     c1lat = bounds._northEast.lat;
     c1lng = bounds._northEast.lng;
@@ -108,12 +111,12 @@ map.on('moveend', function(e) {
                 $.each(data.elements, function(index, el) {
                     console.log(el);
                     if (el.tags) {
-                        if (el.tags.name) {
+                        if (el.tags.name && el.tags.tourism) {
                             exceed += 1;
                             if (exceed > 30) {
                                 return false;
                             }
-                            console.log(el.tags.name);
+                            //console.log(el.tags);
                             //creazione del marker per ogni singolo punto di interesse
                             var markerLocation = new L.LatLng(el.lat, el.lon);
 
@@ -128,7 +131,13 @@ map.on('moveend', function(e) {
                                 icon: redMarker
                             });
                             marker.addTo(layerGroup);
-                            marker.bindPopup("Questo posto e': " + el.tags.name);
+
+                            var tags = el.tags;
+
+                            console.log("marker #" + exceed);
+                            
+
+                            marker.bindPopup("Questo posto e': " + el.tags.name + '\n');
 
                         }
                     }
