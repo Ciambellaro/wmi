@@ -61,7 +61,7 @@ function onLocationError(e) {
 
 function addRoute() {
     if (!editing) {
-        alert("modalità edit attivata");
+        //alert("modalità edit attivata");
         editing = true;
         routes = [position];
 
@@ -78,7 +78,7 @@ function addRoute() {
 
 
     } else {
-        alert("modalità edit disattivata");
+        //alert("modalità edit disattivata");
         editing = false;
 
         if (routes.length > 1) {
