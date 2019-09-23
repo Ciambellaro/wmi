@@ -8,6 +8,7 @@ var OSM_layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 var map = L.map('map').fitWorld();
 var layerGroup = L.layerGroup().addTo(map);
 var layerGroupPos = L.layerGroup().addTo(map);
+//var layerRoute = L.layerGroup().addTo(map);
 var position;
 var count = 0;
 
@@ -54,6 +55,10 @@ function onLocationFound(e) {
 
 function onLocationError(e) {
     alert(e.message);
+}
+
+function addRoute() {
+    alert("cazzo");
 }
 
 /*
@@ -159,3 +164,15 @@ map.locate({
     watch: true,
     maxZoom: 14
 });
+
+
+
+/*
+L.Routing.control({
+  waypoints: [
+    L.latLng(44.486568, 11.270229),
+    L.latLng(44.484099, 11.281602)
+  ]
+}).addTo(map);
+*/
+
