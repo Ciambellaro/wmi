@@ -12,7 +12,7 @@ var layerGroupPos = L.layerGroup().addTo(map);
 var position;
 var count = 0;
 var editing = false;
-var routes = []; 
+var routes = [];
 
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -64,6 +64,15 @@ function addRoute() {
         alert("modalità edit attivata");
         editing = true;
         routes = [position];
+
+        $.toast({
+            heading: 'Informazione',
+            text: 'Clicca su una meta per aggiungerla al percorso',
+            showHideTransition: 'slide',
+            position: 'bottom-center',
+            icon: 'info'
+        });
+
         document.getElementById("createRoute").className = "btn btn-success btn-circle btn-lg";
         document.getElementById("routeIcon").className = "glyphicon glyphicon-ok";
 
@@ -72,10 +81,29 @@ function addRoute() {
         alert("modalità edit disattivata");
         editing = false;
 
-        L.Routing.control({
-            waypoints: routes,
-            createMarker: function() { return null; }
-        }).addTo(map);
+        if (routes.length > 1) {
+            L.Routing.control({
+                waypoints: routes,
+                createMarker: function() { return null; }
+            }).addTo(map);
+
+            $.toast({
+                heading: 'Perfetto!',
+                text: 'Il percorso è stato creato correttamente',
+                showHideTransition: 'slide',
+                position: 'bottom-center',
+                icon: 'success'
+            });
+        } else {
+            $.toast({
+                heading: 'Errore',
+                text: 'Non è stato possbile creare il percorso in mancanza di una o più destinazioni',
+                showHideTransition: 'fade',
+                position: 'bottom-center',
+                icon: 'error'
+            });
+        }
+
 
         document.getElementById("createRoute").className = "btn btn-warning btn-circle btn-lg";
         document.getElementById("routeIcon").className = "glyphicon glyphicon-road";
@@ -131,7 +159,6 @@ map.on('moveend', function(e) {
         //url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
         success: function(data) {
             //data = JSON.parse(data);
-            var routeEl = 1;
             count += 1;
             console.log("richiesta overpass #" + count);
             //console.log(urlOverpass);
@@ -160,13 +187,30 @@ map.on('moveend', function(e) {
                                 icon: redMarker
                             });
 
+                            var textToast = "Meta aggiunta alla lista";
+
                             marker.addTo(layerGroup).on('click', function(e) {
                                 if (editing) {
                                     routes.push(markerLocation);
                                     $.toast({
-                                        title: 'A small bitesize snack, not a toast!',
-                                        type: 'info',
-                                        delay: 5000
+                                        text: textToast, // Text that is to be shown in the toast
+                                        heading: 'Aggiunta!', // Optional heading to be shown on the toast
+                                        
+                                        showHideTransition: 'fade', // fade, slide or plain
+                                        allowToastClose: true, // Boolean value true or false
+                                        hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
+                                        stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
+                                        position: 'bottom-center', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
+                                        
+                                        bgColor: '#444444',  // Background color of the toast
+                                        textColor: '#eeeeee',  // Text color of the toast
+                                        textAlign: 'left',  // Text alignment i.e. left, right or center
+                                        loader: true,  // Whether to show loader or not. True by default
+                                        loaderBg: '#9EC600',  // Background color of the toast loader
+                                        beforeShow: function () {}, // will be triggered before the toast is shown
+                                        afterShown: function () {}, // will be triggered after the toat has been shown
+                                        beforeHide: function () {}, // will be triggered before the toast gets hidden
+                                        afterHidden: function () {}  // will be triggered after the toast has been hidden
                                     });
                                 }
                             });
