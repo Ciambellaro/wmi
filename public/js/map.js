@@ -131,6 +131,7 @@ map.on('moveend', function(e) {
         //url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
         success: function(data) {
             //data = JSON.parse(data);
+            var routeEl = 1;
             count += 1;
             console.log("richiesta overpass #" + count);
             //console.log(urlOverpass);
@@ -162,6 +163,11 @@ map.on('moveend', function(e) {
                             marker.addTo(layerGroup).on('click', function(e) {
                                 if (editing) {
                                     routes.push(markerLocation);
+                                    $.toast({
+                                        title: 'A small bitesize snack, not a toast!',
+                                        type: 'info',
+                                        delay: 5000
+                                    });
                                 }
                             });
 
@@ -169,7 +175,11 @@ map.on('moveend', function(e) {
 
                             console.log("marker #" + exceed);
 
-                            marker.bindPopup("Questo posto e': " + el.tags.name + '\n');
+                            if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
+                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"]);
+                            } else {
+                                marker.bindPopup("Questo posto e': " + el.tags.name);
+                            }
 
                         }
                     }
