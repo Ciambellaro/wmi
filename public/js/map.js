@@ -13,6 +13,7 @@ var position;
 var count = 0;
 var editing = false;
 var routes = [];
+var currentRoute;
 
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -81,8 +82,13 @@ function addRoute() {
         //alert("modalità edit disattivata");
         editing = false;
 
+        if (currentRoute) {
+            currentRoute.setWaypoints([]);
+            $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
+        }
+
         if (routes.length > 1) {
-            L.Routing.control({
+            currentRoute = L.Routing.control({
                 waypoints: routes,
                 createMarker: function() { return null; }
             }).addTo(map);
