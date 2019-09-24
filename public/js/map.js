@@ -182,12 +182,50 @@ map.on('moveend', function(e) {
                             //creazione del marker per ogni singolo punto di interesse
                             var markerLocation = new L.LatLng(el.lat, el.lon);
 
-                            var redMarker = L.ExtraMarkers.icon({
-                                icon: 'fa-coffee',
-                                markerColor: 'orange',
-                                shape: 'square',
-                                prefix: 'fa'
-                            });
+                            if(el.tags.tourism == 'hotel' || el.tags.tourism == 'guest_house') {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-bed',
+                                    markerColor: 'cyan',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            } else if(el.tags.tourism == 'attraction') {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-archway',
+                                    markerColor: 'orange',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            } else if(el.tags.tourism == 'museum') {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-landmark',
+                                    markerColor: 'red',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            } else if(el.tags.tourism == 'information') {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-info',
+                                    iconColor: 'black',
+                                    markerColor: 'white',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            } else if(el.tags.tourism == 'artwork') {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-monument',
+                                    markerColor: 'yellow',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            } else {
+                                var redMarker = L.ExtraMarkers.icon({
+                                    icon: 'fa-coffee',
+                                    markerColor: 'green-light',
+                                    shape: 'square',
+                                    prefix: 'fa'
+                                });
+                            }
 
                             var marker = L.marker(markerLocation, {
                                 icon: redMarker
