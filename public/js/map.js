@@ -56,7 +56,7 @@ function onLocationFound(e) {
 }
 
 function onLocationError(e) {
-    alert(e.message);
+    //alert(e.message);
 }
 
 function addRoute() {
@@ -148,7 +148,7 @@ map.on('moveend', function(e) {
     c1lng = bounds._northEast.lng;
     c2lat = bounds._southWest.lat;
     c2lng = bounds._southWest.lng;
-    urlOverpass = "https://overpass-api.de/api/interpreter?data=[out:json];(node['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");way['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");node['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");<;);out meta;";
+    urlOverpass = "https://lz4.overpass-api.de/api/interpreter?data=[out:json];(node['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");way['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");node['tourism'](" + c2lat + "," + c2lng + "," + c1lat + "," + c1lng + ");<;);out meta;";
 
     //var orangeMarker = L.AwesomeMarkers.icon({markerColor: 'orange'});
 
