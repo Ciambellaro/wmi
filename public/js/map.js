@@ -257,6 +257,10 @@ map.on('moveend', function(e) {
                                         afterHidden: function () {}  // will be triggered after the toast has been hidden
                                     });
                                 }
+
+                                if(addClipMode){
+                                    openMenu(el.tags.name, " " +markerLocation);
+                                }
                             });
 
                             var tags = el.tags;
