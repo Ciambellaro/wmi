@@ -259,7 +259,7 @@ map.on('moveend', function(e) {
                                 }
 
                                 if(addClipMode){
-                                    openMenu(el.tags.name, " " +markerLocation);
+                                    openMenu(el.tags.name, " "+markerLocation);
                                 }
                             });
 
