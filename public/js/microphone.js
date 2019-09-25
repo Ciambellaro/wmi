@@ -39,6 +39,8 @@ function addClip() {
 
     }
 
-    function openMenu(){
+    function openMenu(nome, coordinate){
         $('#clipMenu').modal('show');
+        $('#nomeTitolo').append(nome);
+        $('#coord').append(coordinate);
     }
