@@ -64,6 +64,7 @@ function addRoute() {
     if (!editing) {
         //alert("modalità edit attivata");
         editing = true;
+        document.getElementById("createClip").disabled = true;
         routes = [position];
 
         $.toast({
@@ -81,6 +82,7 @@ function addRoute() {
     } else {
         //alert("modalità edit disattivata");
         editing = false;
+        document.getElementById("createClip").disabled = false;
 
         if (currentRoute) {
             currentRoute.setWaypoints([]);
@@ -110,11 +112,8 @@ function addRoute() {
             });
         }
 
-
         document.getElementById("createRoute").className = "btn btn-warning btn-circle btn-lg";
         document.getElementById("routeIcon").className = "glyphicon glyphicon-road";
-
-
     }
 }
 
@@ -257,6 +256,10 @@ map.on('moveend', function(e) {
                                         afterHidden: function () {}  // will be triggered after the toast has been hidden
                                     });
                                 }
+                                
+                                if(addClipMode){
+                                    openMenu();
+                                }
                             });
 
                             var tags = el.tags;
@@ -264,9 +267,9 @@ map.on('moveend', function(e) {
                             console.log("marker #" + exceed);
 
                             if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
-                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"]);
+                                marker.bindPopup(el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"]);
                             } else {
-                                marker.bindPopup("Questo posto e': " + el.tags.name);
+                                marker.bindPopup(el.tags.name);
                             }
 
                         }
