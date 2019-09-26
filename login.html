@@ -3,17 +3,24 @@
 <head>
         <title>Where M I</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="css/stileLogin.css">
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        
+        <style>
+          body {
+            background-image: url("img/loginbg.jpg");
+          }
+        </style>
 </head>
 <body>
     <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header text-center">
-              <h4 class="modal-title w-100 font-weight-bold">Accedi</h4>
+              <img src="img/logo.png" alt="logo" height="42" width="60">
+              <h4 class="modal-title w-100 font-weight-bold">Esegui il login</h4>
+              <img src="img/logo.png" alt="logo" height="42" width="60">
             </div>
             <div class="modal-body mx-3">
               <div class="md-form mb-5">
@@ -30,7 +37,7 @@
       
             </div>
             <div class="modal-footer d-flex justify-content-center">
-              <button class="btn btn-default" onclick="login()" target="_blank">Accedi</button>
+              <button id="btnAccedi" class="btn btn-default" onclick="login()" target="_blank">Accedi</button>
             </div>
           </div>
         </div>
@@ -41,7 +48,7 @@
 <script>
     //apertura modal al caricamento della pagina
     $(window).on('load',function(){
-        $('#modalLoginForm').modal('show');
+        $('#modalLoginForm').modal({backdrop: 'static', keyboard: false});
     });
     //se le credenziali sono giuste, avviare la mappa
     function login() {
@@ -50,7 +57,7 @@
         if(user == "admin" && pwd == "admin") {
           window.location.assign("/map");
         } else {
-            window.alert("Credenziali errate");
+            window.alert("Credenziali errate !");
         }
     }
 </script>
