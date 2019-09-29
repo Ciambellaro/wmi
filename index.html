@@ -22,57 +22,12 @@
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/stileIndex.css">
 
     <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<style>
 
-    <style>
-        #map {
-            width: 100vw;
-            height: 100vh;
-        }
-        
-        #createRoute {
-            position: absolute;
-            bottom: 100px;
-            right: 30px;
-        }
-        
-        #createClip {
-            position: absolute;
-            bottom: 100px;
-            left: 30px;
-        }
-        
-        .btn-circle.btn-lg {
-            width: 50px;
-            height: 50px;
-            padding: 10px 16px;
-            font-size: 18px;
-            line-height: 1.33;
-            border-radius: 25px;
-        }
-        
-        .modal-dialog {
-            position: relative;
-            top: 0px;
-            left: 0px;
-            text-align: left;
-        }
-        
-        .modal-title {
-            text-align: center;
-            font-weight: bold;
-            font-size: 22px;
-        }
-        
-        .tform {
-            font-weight: bold;
-        }
-        
-        #clipform {
-            font-size: 15px;
-        }
-    </style>
+</style>
 </head>
 
 <body>
@@ -161,6 +116,23 @@
                                     <option>5</option>
                                 </select>
                             </div>
+                            <div class="left">
+                                <div id="startButton" class="button">
+                                  Start
+                                </div>
+                                <h2>Preview</h2>
+                                <video id="preview" width="160" height="120" autoplay muted></video>
+                              </div> <!-- chiusura left-->
+                              <div class="right">
+                                <div id="stopButton" class="button">
+                                  Stop
+                                </div>
+                                <h2>Recording</h2>
+                                <video id="recording" width="160" height="120" controls></video>
+                                <a id="downloadButton" class="button">
+                                        Download
+                                      </a>
+                              </div> <!-- chiusura right-->
                         </form>
 
                     </div>

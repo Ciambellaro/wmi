@@ -1,0 +1,92 @@
+#map {
+    width: 100vw;
+    height: 100vh;
+}
+
+#createRoute {
+    position: absolute;
+    bottom: 100px;
+    right: 30px;
+}
+
+#createClip {
+    position: absolute;
+    bottom: 100px;
+    left: 30px;
+}
+
+.btn-circle.btn-lg {
+    width: 50px;
+    height: 50px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 25px;
+}
+
+.modal-dialog {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    text-align: left;
+}
+
+.modal-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.tform {
+    font-weight: bold;
+}
+
+#clipform {
+    font-size: 15px;
+}
+
+.left {
+    margin-right: 10px;
+    float: left;
+    width: 160px;
+    padding: 0px;
+  }
+  
+  .right {
+    margin-left: 10px;
+    float: left;
+    width: 160px;
+    padding: 0px;
+  }
+
+#startButton{
+    cursor: pointer;
+    display: block;
+    width: 160px;
+    border: 1px solid black;
+    font-size: 16px;
+    text-align: center;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    color: white;
+    background-color: darkgreen;
+}
+
+#stopButton{
+    cursor: pointer;
+    display: block;
+    width: 160px;
+    border: 1px solid black;
+    font-size: 16px;
+    text-align: center;
+    padding-top: 2px;
+    padding-bottom: 4px;
+    color: white;
+    background-color: red;
+}
+
+.bottom {
+    clear: both;
+    padding-top: 10px;
+  }
+      
