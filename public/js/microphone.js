@@ -4,8 +4,7 @@ function addClip() {
     if (!addClipMode) {
         //modalità aggiungi clip attivata
         addClipMode = true;
-        document.getElementById("createRoute").disabled = true;
-
+        
         $.toast({
             heading: 'Informazione',
             text: 'Clicca su un lugo d interesse per aggiungere una clip',
@@ -21,8 +20,6 @@ function addClip() {
     } else {
         //modalità aggiungi clip disattivata
         addClipMode = false;
-        document.getElementById("createRoute").disabled = false;
-
 
             $.toast({
                 heading: 'Ok, fatto!',
@@ -31,13 +28,14 @@ function addClip() {
                 position: 'bottom-center',
                 icon: 'success'
             });
-        }
+        
 
 
         document.getElementById("createClip").className = "btn btn-warning btn-circle btn-lg";
         document.getElementById("clipIcon").className = "glyphicon glyphicon-forward";
 
     }
+}    
 
     function openMenu(nome, coordinate){
         $('#clipMenu').modal('show');
