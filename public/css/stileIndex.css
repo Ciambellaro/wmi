@@ -5,14 +5,35 @@
 
 #createRoute {
     position: absolute;
-    bottom: 100px;
-    right: 30px;
+    bottom: 40px;
+    right: 40px;
 }
 
 #createClip {
     position: absolute;
-    bottom: 100px;
-    left: 30px;
+    bottom: 40px;
+    left: 40px;
+}
+
+#dropdownMenuButton {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+}
+
+#dropDownLogout {
+    width: 250px;
+    height: 100px;
+    text-align: center;
+}
+
+.dropdown-divider {
+    margin: 10px;
+}
+
+#tipoDiAccesso {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .btn-circle.btn-lg {

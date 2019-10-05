@@ -50,19 +50,35 @@
         <div id="map" class="embed-responsive embed-responsive-1by1">
 
             <div id="RouteDiv" class="leaflet-bottom leaflet-right" style="pointer-events: auto">
-                <button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute() "
+                <button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute()"
                     title="Crea un percorso">
                     <i class="glyphicon glyphicon-road" id="routeIcon"></i>
                 </button>
             </div>
             <div id="ClipDiv" class="leaflet-bottom leaflet-left" style="pointer-events: auto">
-                <button type="button" class="btn btn-warning btn-circle btn-lg" id="createClip" onClick="addClip() "
+                <button type="button" class="btn btn-warning btn-circle btn-lg" id="createClip" onClick="addClip()"
                     title="Aggiungi clip">
                     <i class="glyphicon glyphicon-forward" id="clipIcon"></i>
                 </button>
             </div>
+            <div id="LoginDiv" class="leaflet-top leaflet-right" style="pointer-events: auto">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-primary btn-circle btn-lg"
+                        id="dropdownMenuButton" onClick="openLogoutWindow()" title="Impostazioni login"
+                        data-toggle="dropdown">
+                        <i class="glyphicon glyphicon glyphicon-user" id="loginIcon"></i>
+                    </button>
+                    <div id="dropDownLogout" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <p id="tipoDiAccesso"></p>
+                        <div class="dropdown-divider"></div>
+                        <button type="button" class="btn btn-info" onclick="backToLogin()">Esci</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
+        <!-- MODAL PER REGISTRAZIONE CLIP -->
         <div class="modal fade" id="clipMenu" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -162,25 +178,29 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 
 </body>
 <script>
-   if (sessionStorage.getItem('toPass') == 'adm') { //carica la modilità 'crea clip' solo se sei un creator
+    if (sessionStorage.getItem('toPass') == 'adm') { //carica la modilità 'crea clip' solo se sei un creator
         /*$(document).ready(function () {
             $("#ClipDiv").append('<button type="button" class="btn btn-warning btn-circle btn-lg" id="createClip" onClick="addClip() " title="Aggiungi clip"><i class="glyphicon glyphicon-forward" id="clipIcon"></i></button>');
         });*/
         document.getElementById("RouteDiv").innerHTML = "";
+        document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come GUIDA";
         /*document.getElementById("createRoute").disabled = true;
         document.getElementById("createRoute").style.background = "none";
         document.getElementById("createRoute").style.border = "none";*/
-        
-        
+
+
     } else if (sessionStorage.getItem('toPass') == 'usr') { //carica la modilità 'crea percorso' solo se sei un turista
         /*$(document).ready(function () {
             $("#RouteDiv").append('<button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute() " title="Crea un percorso"><i class="glyphicon glyphicon-road" id="routeIcon"></i></button>');
         });*/
         document.getElementById("ClipDiv").innerHTML = "";
+        document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come TURISTA";
         /*document.getElementById("createRoute").disabled = true;
         document.getElementById("createRoute").style.background = "none";
         document.getElementById("createRoute").style.border = "none";*/

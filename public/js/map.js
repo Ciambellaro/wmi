@@ -118,6 +118,10 @@ function addRoute() {
     }
 }
 
+function backToLogin() {
+    window.location.assign("/");
+}
+
 /*
 //FUNZIONI DI GOOGLE MAPS PER LOCALIZZARE I NEARBY PLACES
 function initialize() {
