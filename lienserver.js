@@ -9,9 +9,10 @@ const Youtube = require("youtube-api"),
 
 var express = require('express');
 var app = express();
-
-// I downloaded the file from OAuth2 -> Download JSON
-const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
+var url = require('url');
+var oauth;
+var auth;
+var access = 0;
 
 
 // Init lien app
@@ -24,6 +25,10 @@ var app = new Lien({
         cert: "pubcert.pem"
     }
 });
+
+
+// I downloaded the file from OAuth2 -> Download JSON
+const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
 
 /*app.get('/', function (req, res) {
   res.sendfile('login.html'); 
@@ -39,23 +44,37 @@ app.on("load", function(err) {
     err && process.exit(1);
 });
 
-let oauth = Youtube.authenticate({
-    type: "oauth",
-    client_id: CREDENTIALS.web.client_id,
-    client_secret: CREDENTIALS.web.client_secret,
-    redirect_url: CREDENTIALS.web.redirect_uris[0]
+// Add page
+//app.get("/", `${__dirname}/login.html`);
+app.get('/', lien => {
+    access = 0;
+    lien.file(`${__dirname}/login.html`);
 });
 
-opn(oauth.generateAuthUrl({
-    access_type: "offline",
-    scope: ["https://www.googleapis.com/auth/youtube.upload"]
-}));
+//app.get("/map", `${__dirname}/index.html`);
 
+app.get('/map', lien => {
+        lien.file(`${__dirname}/index.html`);
+});
 
-// Add page
-app.get("/", `${__dirname}/login.html`);
+app.get('/auth', lien => {
+        access += 1;
+        oauth = Youtube.authenticate({
+            type: "oauth",
+            client_id: CREDENTIALS.web.client_id,
+            client_secret: CREDENTIALS.web.client_secret,
+            redirect_url: CREDENTIALS.web.redirect_uris[0]
+        });
 
-app.get("/map", `${__dirname}/index.html`);
+        auth = oauth.generateAuthUrl({
+            access_type: "offline",
+            scope: ["https://www.googleapis.com/auth/youtube.upload"]
+        });
+
+        console.log(auth);
+        console.log(oauth);
+        opn(auth);
+});
 
 // Handle oauth2 callback
 app.get("/oauth2callback", lien => {
