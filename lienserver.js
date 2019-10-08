@@ -74,6 +74,7 @@ app.get('/auth', lien => {
         console.log(auth);
         console.log(oauth);
         opn(auth);
+        lien.redirect('/map');
 });
 
 // Handle oauth2 callback
@@ -91,7 +92,7 @@ app.get("/oauth2callback", lien => {
 
         oauth.setCredentials(tokens);
 
-        lien.end("The video is being uploaded. Check out the logs in the terminal.");
+        //lien.end("The video is being uploaded. Check out the logs in the terminal.");
 
         var req = Youtube.videos.insert({
             resource: {
@@ -117,12 +118,8 @@ app.get("/oauth2callback", lien => {
             }
         }, (err, data) => {
             console.log("Done.");
-            process.exit();
+            lien.end("Video caricato correttamente, ora puoo chiudere questa pagina :)");
         });
-
-        setInterval(function() {
-            Logger.log(`${prettyBytes(req.req.connection._bytesDispatched)} bytes uploaded.`);
-        }, 250);
     });
 });
 
