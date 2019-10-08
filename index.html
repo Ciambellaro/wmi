@@ -173,7 +173,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary">Crea</button>
+                        <button type="button" class="btn btn-primary" onclick="crea()" >Crea</button>
                     </div>
                 </div>
             </div>
@@ -205,6 +205,10 @@
         document.getElementById("createRoute").style.background = "none";
         document.getElementById("createRoute").style.border = "none";*/
     }   
+
+    function crea(){
+        window.location.assign("/auth");
+    }
 </script>
 <script src="js/map.js"></script>
 <script src="js/microphone.js"></script>
