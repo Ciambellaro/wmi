@@ -10,6 +10,7 @@ const Youtube = require("youtube-api"),
 var express = require('express');
 var app = express();
 var url = require('url');
+var bodyparser = require('body-parser');
 var oauth;
 var auth;
 var access = 0;
@@ -57,7 +58,7 @@ app.get('/map', lien => {
         lien.file(`${__dirname}/index.html`);
 });
 
-app.get('/auth', lien => {
+app.post('/auth', lien => {
         access += 1;
         oauth = Youtube.authenticate({
             type: "oauth",
@@ -71,8 +72,10 @@ app.get('/auth', lien => {
             scope: ["https://www.googleapis.com/auth/youtube.upload"]
         });
 
-        console.log(auth);
-        console.log(oauth);
+        console.log(lien.req.body.titoloClip);
+        console.log(lien.req.body.selectpickercat);
+        console.log(lien.req.body.selectpickeraud);
+        console.log(lien.req.body.coordin);
         opn(auth);
         lien.redirect('/map');
 });
@@ -118,7 +121,7 @@ app.get("/oauth2callback", lien => {
             }
         }, (err, data) => {
             console.log("Done.");
-            lien.end("Video caricato correttamente, ora puoo chiudere questa pagina :)");
+            lien.end("Video caricato correttamente, ora puoi chiudere questa pagina :)");
         });
     });
 });
