@@ -9,8 +9,20 @@ const Youtube = require("youtube-api"),
 
 var express = require('express');
 var app = express();
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null,  __dirname + "/public/video");
+     },
+    filename: function (req, file, cb) {
+        console.log(file);
+        cb(null , "video.mp4");
+    },
+    limits: {fileSize: 1000000}
+});
+
+const bodyParser = require('body-parser');
 var url = require('url');
-var bodyparser = require('body-parser');
 var oauth;
 var auth;
 var access = 0;
@@ -27,6 +39,8 @@ var app = new Lien({
     }
 });
 
+//app.use(bodyParser.json());       
+//app.use(bodyParser.urlencoded({ extended: false})); 
 
 // I downloaded the file from OAuth2 -> Download JSON
 const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
@@ -58,8 +72,31 @@ app.get('/map', lien => {
         lien.file(`${__dirname}/index.html`);
 });
 
+var titolo = "";
+var coordinate = "";
+var scopo = "";
+var categoria = "";
+var audience = "";
+var video = "";
+
 app.post('/auth', lien => {
-        access += 1;
+        //console.log("########: " + titolo + " " + coordinate + " " + scopo + " " + categoria + " " + audience + " video: " + video + " ################# ");
+        
+        var upload = multer({
+            storage: storage
+        }).single('userVideo');
+        upload(lien.req, lien.res, function(err) {
+            //lien.res.end('File is uploaded')
+            console.log("File is uploaded");
+            titolo = lien.req.body.titoloClip;
+            coordinate = lien.req.body.coordin;
+            scopo = lien.req.body.optionsRadios;
+            categoria = lien.req.body.cat;
+            audience = lien.req.body.aud;
+            video = lien.req.body.userVideo;
+            console.log("########: " + titolo + " " + coordinate + " " + scopo + " " + categoria + " " + audience + " video: " + video + " ######## ");
+        });
+
         oauth = Youtube.authenticate({
             type: "oauth",
             client_id: CREDENTIALS.web.client_id,
@@ -72,12 +109,11 @@ app.post('/auth', lien => {
             scope: ["https://www.googleapis.com/auth/youtube.upload"]
         });
 
-        console.log(lien.req.body.titoloClip);
-        console.log(lien.req.body.selectpickercat);
-        console.log(lien.req.body.selectpickeraud);
-        console.log(lien.req.body.coordin);
+        console.log(auth);
+        console.log(oauth);
         opn(auth);
-        lien.redirect('/map');
+
+        lien.redirect("/map");
 });
 
 // Handle oauth2 callback
@@ -95,14 +131,16 @@ app.get("/oauth2callback", lien => {
 
         oauth.setCredentials(tokens);
 
-        //lien.end("The video is being uploaded. Check out the logs in the terminal.");
+        lien.end("The video is being uploaded. Check out the logs in the terminal.");
 
         var req = Youtube.videos.insert({
             resource: {
                 // Video title and description
                 snippet: {
-                    title: "Prova pubblico",
-                    description: "Test video upload via YouTube API"
+                    title: titolo,
+                    description: "Metadati del video: " + " - Coordinate location: " + coordinate + 
+                                 " - Scopo clip: " + scopo + " - Categoria: " + categoria + 
+                                 " - Audience clip: " + audience + "."
                 }
                 // I don't want to spam my subscribers
                 ,
@@ -117,13 +155,22 @@ app.get("/oauth2callback", lien => {
                 // Create the readable stream to upload the video
                 ,
             media: {
-                body: fs.createReadStream("video.mp4")
+                body: fs.createReadStream("public/video/video.mp4")
             }
         }, (err, data) => {
             console.log("Done.");
-            lien.end("Video caricato correttamente, ora puoi chiudere questa pagina :)");
+            //process.exit();
         });
+
+        /*setInterval(function() {
+            Logger.log(`${prettyBytes(req.req.connection._bytesDispatched)} bytes uploaded.`);
+        }, 250);*/
+
+        
     });
+
+    
+
 });
 
 // Listen for server errors
