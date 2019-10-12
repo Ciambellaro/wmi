@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -87,46 +88,32 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!--	
-                    <form id="clipform" name="insertClip" action="/action_page.php" onsubmit="return validateForm()" method="post">
-                        <span class="tform">Coordinate marker:   </span><span id="coord"></span><br>
-                        <span class="tform">Nome:   </span><input type="text" name="fname"><br>
-                        <span class="tform">Scopo:   </span> <input type="radio" name="purpose" value="what" checked> What 
-                        <input type="radio" name="purpose" value="how"> How 
-                        <input type="radio" name="purpose" value="why"> Why
-                        <br>
-                        <span class="tform">Categoria:   </span><input type="text" name="fcat" placeholder="es. ITA"><br>
-                        <span class="tform">Audience:   </span><input type="text" name="faud" placeholder="es. adulti"><br><br><br>
-                        <input type="submit" value="Submit">
-                    </form>
-                -->
-                        <form id="clipform" name="insertClip" action="/action_page.php" onsubmit="return validateForm()"
-                            method="post" role="form">
+                        <form id="clipform" name="insertClip" action="/auth" onsubmit="return validateForm()"
+                            method="POST" role="form" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label>Coordinate</label>
-                                <p class="form-control-static" id="coord"></p>
+                                <input type="hidden" value="" name="coordin" id="coordin" />
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Titolo</label>
-                                <input type="text" class="form-control" id="titoloClip"
+                                <input type="text" class="form-control" id="titoloClip" name="titoloClip"
                                     placeholder="Inserisci il titolo della clip">
                             </div>
                             <div class="form-group">
                                 <label>Scopo</label>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="What"
                                             checked>What</label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1"
-                                            value="option1">How</label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2"
+                                            value="How">How</label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1"
-                                            value="option1">Why</label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3"
+                                            value="Why">Why</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -141,6 +128,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Categoria</label>
+<<<<<<< HEAD
                                 <select class="form-control">
                                     <option value="none">Nessuna</option>
                                     <option value="nat">Natura</option>
@@ -169,16 +157,33 @@
                                     <option value="P3">3</option>
                                     <option value="P4">4</option>
                                     <option value="P5">5</option>
+=======
+                                <select class="form-control" name="cat">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+>>>>>>> 4c05a3eb02a3f69c0d663cee57f56aefb631df94
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Audience</label>
+<<<<<<< HEAD
                                 <select class="form-control">
                                     <option value="gen">Pubblico generico</option>
                                     <option value="pre">Pre-scuola</option>
                                     <option value="elm">Scuola primaria</option>
                                     <option value="mid">Scuola media</option>
                                     <option value="scl">Specialisti del settore</option>
+=======
+                                <select class="form-control" name="aud">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+>>>>>>> 4c05a3eb02a3f69c0d663cee57f56aefb631df94
                                 </select>
                             </div>
                             <div class="left">
@@ -198,12 +203,20 @@
                                     Download
                                 </a>
                             </div> <!-- chiusura right-->
+                            <br>
+                            <label for="avatar">Scegli un video da caricare:</label>
+                            <input type="file" id="userVideo" name="userVideo" accept="video/*">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                            <button type="submit" class="btn btn-primary">Crea</button>
                         </form>
 
                     </div>
                     <div class="modal-footer">
+<<<<<<< HEAD
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
                         <button type="button" class="btn btn-primary" onclick="crea()">Crea</button>
+=======
+>>>>>>> 4c05a3eb02a3f69c0d663cee57f56aefb631df94
                     </div>
                 </div>
             </div>
@@ -251,12 +264,16 @@
         document.getElementById("createRoute").style.border = "none";*/
     }
 
+<<<<<<< HEAD
     function crea() {
         window.location.assign("/auth");
     }
+=======
+>>>>>>> 4c05a3eb02a3f69c0d663cee57f56aefb631df94
 
 </script>
 <script src="js/map.js"></script>
 <script src="js/microphone.js"></script>
+
 
 </html>

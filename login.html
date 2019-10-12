@@ -56,7 +56,7 @@
         var pwd = $("input[type='password']").val();
         if(user == "admin" && pwd == "admin") {
           sessionStorage.setItem("toPass", "adm"); //permette di accedere alla variabile toPass = a da altre pagine html
-          window.location.assign("/auth");
+          window.location.assign("/map");
         } else if(user == "user" && pwd == "user") {
           sessionStorage.setItem("toPass", "usr"); //permette di accedere alla variabile toPass = user da altre pagine html
           window.location.assign("/map");

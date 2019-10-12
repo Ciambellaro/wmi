@@ -1,3 +1,4 @@
+
 // Dependencies
 const Youtube = require("youtube-api"),
     fs = require('fs'),
@@ -9,6 +10,17 @@ const Youtube = require("youtube-api"),
 
 var express = require('express');
 var app = express();
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null,  __dirname + "/public/uploads");
+     },
+    filename: function (req, file, cb) {
+        console.log(file);
+        cb(null , "video.mp4");
+    }
+});
+const bodyParser = require('body-parser');
 var url = require('url');
 var oauth;
 var auth;
@@ -26,6 +38,8 @@ var app = new Lien({
     }
 });
 
+//app.use(bodyParser.json());       
+//app.use(bodyParser.urlencoded({ extended: false})); 
 
 // I downloaded the file from OAuth2 -> Download JSON
 const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
@@ -57,7 +71,32 @@ app.get('/map', lien => {
         lien.file(`${__dirname}/index.html`);
 });
 
-app.get('/auth', lien => {
+var titolo = "";
+var coordinate = "";
+var scopo = "";
+var categoria = "";
+var audience = "";
+var video;
+
+app.post('/auth', lien => {
+        var upload = multer({
+            storage: storage
+        }).single('userVideo');
+        upload(lien.req, lien.res, function(err) {
+            //lien.res.end('File is uploaded')
+            console.log("File is uploaded");
+            titolo = lien.req.body.titoloClip;
+            coordinate = lien.req.body.coordin;
+            scopo = lien.req.body.optionsRadios;
+            categoria = lien.req.body.cat;
+            audience = lien.req.body.aud;
+            video = lien.req.body.userVideo;
+
+            console.log("######## " + coordinate);
+        });
+
+        //console.log("########: " + titolo + " " + coordinate + " " + scopo + " " + categoria + " " + audience + " video: " + video + " ################# ");
+
         access += 1;
         oauth = Youtube.authenticate({
             type: "oauth",
@@ -74,10 +113,15 @@ app.get('/auth', lien => {
         console.log(auth);
         console.log(oauth);
         opn(auth);
+
+       
+        lien.redirect("/map");
 });
 
 // Handle oauth2 callback
 app.get("/oauth2callback", lien => {
+
+    console.log("*******************" + titolo + " " + scopo + " " + coordinate + " " + categoria + " " + audience + " " + video);
 
     Logger.log("Trying to get the token using the following code: " + lien.query.code);
     oauth.getToken(lien.query.code, (err, tokens) => {
@@ -97,8 +141,10 @@ app.get("/oauth2callback", lien => {
             resource: {
                 // Video title and description
                 snippet: {
-                    title: "Prova pubblico",
-                    description: "Test video upload via YouTube API"
+                    title: titolo,
+                    description: "Metadati del video:  Coordinate location: " + coordinate +
+                                 "Scopo clip: " + scopo  + "Categoria: " + categoria + 
+                                 "Audience clip: " + audience + "."
                 }
                 // I don't want to spam my subscribers
                 ,
@@ -113,20 +159,26 @@ app.get("/oauth2callback", lien => {
                 // Create the readable stream to upload the video
                 ,
             media: {
-                body: fs.createReadStream("video.mp4")
+                body: fs.createReadStream( __dirname + "/public/uploads/video.mp4")
             }
         }, (err, data) => {
             console.log("Done.");
-            process.exit();
+            //process.exit();
         });
 
-        setInterval(function() {
+        /*setInterval(function() {
             Logger.log(`${prettyBytes(req.req.connection._bytesDispatched)} bytes uploaded.`);
-        }, 250);
+        }, 250);*/
+
+        
     });
+
+    
+
 });
 
 // Listen for server errors
 app.on("serverError", err => {
     console.log(err.stack);
+
 });
