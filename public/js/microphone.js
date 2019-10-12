@@ -40,7 +40,7 @@ function addClip() {
     function openMenu(nome, coordinate){
         $('#clipMenu').modal('show');
         $('#nomeTitolo').html(nome);
-        $('#coord').html(coordinate);
+        $('#coordin').html(coordinate);
     }
 
 // *********************** GESTIONE RECORDER VIDEO **********************************
@@ -105,6 +105,7 @@ navigator.mediaDevices.getUserMedia(constraintObj)
   let vidSave = document.getElementById('recording');
   let mediaRecorder = new MediaRecorder(mediaStreamObj);
   let chunks = [];
+  var link;
   
   start.addEventListener('click', (ev)=>{
       mediaRecorder.start();
@@ -122,7 +123,6 @@ navigator.mediaDevices.getUserMedia(constraintObj)
       let blob = new Blob(chunks, { 'type' : 'video/mp4;' });
       chunks = [];
       let videoURL = window.URL.createObjectURL(blob);
-      console.log("@@@@@@@@@@@@@@@@@@@@@@ " + videoURL);
       vidSave.src = videoURL;
   }
 })

@@ -63,9 +63,8 @@
             </div>
             <div id="LoginDiv" class="leaflet-top leaflet-right" style="pointer-events: auto">
                 <div class="dropdown">
-                    <button type="button" class="btn btn-primary btn-circle btn-lg"
-                        id="dropdownMenuButton" onClick="openLogoutWindow()" title="Impostazioni login"
-                        data-toggle="dropdown">
+                    <button type="button" class="btn btn-primary btn-circle btn-lg" id="dropdownMenuButton"
+                        onClick="openLogoutWindow()" title="Impostazioni login" data-toggle="dropdown">
                         <i class="glyphicon glyphicon glyphicon-user" id="loginIcon"></i>
                     </button>
                     <div id="dropDownLogout" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -89,51 +88,37 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!--	
-                    <form id="clipform" name="insertClip" action="/action_page.php" onsubmit="return validateForm()" method="post">
-                        <span class="tform">Coordinate marker:   </span><span id="coord"></span><br>
-                        <span class="tform">Nome:   </span><input type="text" name="fname"><br>
-                        <span class="tform">Scopo:   </span> <input type="radio" name="purpose" value="what" checked> What 
-                        <input type="radio" name="purpose" value="how"> How 
-                        <input type="radio" name="purpose" value="why"> Why
-                        <br>
-                        <span class="tform">Categoria:   </span><input type="text" name="fcat" placeholder="es. ITA"><br>
-                        <span class="tform">Audience:   </span><input type="text" name="faud" placeholder="es. adulti"><br><br><br>
-                        <input type="submit" value="Submit">
-                    </form>
-                -->
-                        <form id="clipform" name="insertClip" action="/action_page.php" onsubmit="return validateForm()"
-                            method="post" role="form">
+                        <form id="clipform" name="insertClip" action="/auth" onsubmit="return validateForm()"
+                            method="POST" role="form" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label>Coordinate</label>
-                                <p class="form-control-static" id="coord"></p>
+                                <input type="text" value="" name="coordin" id="coordin" />
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Titolo</label>
-                                <input type="text" class="form-control" id="titoloClip"
+                                <input type="text" class="form-control" id="titoloClip" name="titoloClip"
                                     placeholder="Inserisci il titolo della clip">
                             </div>
                             <div class="form-group">
                                 <label>Scopo</label>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1"
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="What"
                                             checked>What</label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1"
-                                            value="option1">How</label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2"
+                                            value="How">How</label>
                                 </div>
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="optionsRadios" id="optionsRadios1"
-                                            value="option1">Why</label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3"
+                                            value="Why">Why</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Categoria</label>
-                                <select class="form-control">
+                                <select class="form-control" name="cat">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -143,7 +128,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Audience</label>
-                                <select class="form-control">
+                                <select class="form-control" name="aud">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -168,12 +153,15 @@
                                     Download
                                 </a>
                             </div> <!-- chiusura right-->
+                            <br>
+                            <label for="avatar">Scegli un video da caricare:</label>
+                            <input type="file" id="userVideo" name="userVideo" accept="video/*">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
+                            <button type="submit" class="btn btn-primary">Crea</button>
                         </form>
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary" onclick="crea()" >Crea</button>
                     </div>
                 </div>
             </div>
@@ -204,11 +192,9 @@
         /*document.getElementById("createRoute").disabled = true;
         document.getElementById("createRoute").style.background = "none";
         document.getElementById("createRoute").style.border = "none";*/
-    }   
-
-    function crea(){
-        window.location.assign("/auth");
     }
+
+
 </script>
 <script src="js/map.js"></script>
 <script src="js/microphone.js"></script>
