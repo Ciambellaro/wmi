@@ -40,7 +40,7 @@ function addClip() {
     function openMenu(nome, coordinate){
         $('#clipMenu').modal('show');
         $('#nomeTitolo').html(nome);
-        $('#coordin').html(coordinate);
+        $('#coordin').val(coordinate);
     }
 
 // *********************** GESTIONE RECORDER VIDEO **********************************
