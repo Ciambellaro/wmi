@@ -45,9 +45,8 @@
 </head>
 
 <body>
-
     <div align="center">
-        <div id="map" class="embed-responsive embed-responsive-1by1">
+            <div id="map" class="embed-responsive embed-responsive-1by1">
 
             <div id="RouteDiv" class="leaflet-bottom leaflet-right" style="pointer-events: auto">
                 <button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute()"
@@ -63,9 +62,8 @@
             </div>
             <div id="LoginDiv" class="leaflet-top leaflet-right" style="pointer-events: auto">
                 <div class="dropdown">
-                    <button type="button" class="btn btn-primary btn-circle btn-lg"
-                        id="dropdownMenuButton" onClick="openLogoutWindow()" title="Impostazioni login"
-                        data-toggle="dropdown">
+                    <button type="button" class="btn btn-primary btn-circle btn-lg" id="dropdownMenuButton"
+                        onClick="openLogoutWindow()" title="Impostazioni login" data-toggle="dropdown">
                         <i class="glyphicon glyphicon glyphicon-user" id="loginIcon"></i>
                     </button>
                     <div id="dropDownLogout" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -132,23 +130,55 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label>Lingua</label>
+                                <select class="form-control">
+                                    <option value="ita">Italiano</option>
+                                    <option value="eng">Inglese</option>
+                                    <option value="deu">Tedesco</option>
+                                    <option value="fra">Francia</option>
+                                    <option value="esp">Spagna</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Categoria</label>
                                 <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option value="none">Nessuna</option>
+                                    <option value="nat">Natura</option>
+                                    <option value="art">Arte</option>
+                                    <option value="his">Storia</option>
+                                    <option value="flk">Folklore</option>
+                                    <option value="mod">Cultura moderna</option>
+                                    <option value="rel">Religione</option>
+                                    <option value="cui">Cucina e drink</option>
+                                    <option value="spo">Sport</option>
+                                    <option value="mus">Musica</option>
+                                    <option value="mov">Film</option>
+                                    <option value="fas">Moda</option>
+                                    <option value="shp">Shopping</option>
+                                    <option value="tec">Tecnologia</option>
+                                    <option value="pop">Cultura pop e gossip</option>
+                                    <option value="prs">Esperienze personali</option>
+                                    <option value="oth">Altro</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Dettaglio</label>
+                                <select class="form-control">
+                                    <option value="P1">1</option>
+                                    <option value="P2">2</option>
+                                    <option value="P3">3</option>
+                                    <option value="P4">4</option>
+                                    <option value="P5">5</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Audience</label>
                                 <select class="form-control">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
+                                    <option value="gen">Pubblico generico</option>
+                                    <option value="pre">Pre-scuola</option>
+                                    <option value="elm">Scuola primaria</option>
+                                    <option value="mid">Scuola media</option>
+                                    <option value="scl">Specialisti del settore</option>
                                 </select>
                             </div>
                             <div class="left">
@@ -173,16 +203,31 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Chiudi</button>
-                        <button type="button" class="btn btn-primary">Crea</button>
+                        <button type="button" class="btn btn-primary" onclick="crea()">Crea</button>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
+    <!-- Modal del video -->
+    <div class="modal fade" id="ModalVideoPlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!-- 16:9 aspect ratio -->
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay" allowfullscreen="allowfullscreen"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 <script>
     if (sessionStorage.getItem('toPass') == 'adm') { //carica la modilità 'crea clip' solo se sei un creator
         /*$(document).ready(function () {
@@ -204,7 +249,12 @@
         /*document.getElementById("createRoute").disabled = true;
         document.getElementById("createRoute").style.background = "none";
         document.getElementById("createRoute").style.border = "none";*/
-    }   
+    }
+
+    function crea() {
+        window.location.assign("/auth");
+    }
+
 </script>
 <script src="js/map.js"></script>
 <script src="js/microphone.js"></script>
