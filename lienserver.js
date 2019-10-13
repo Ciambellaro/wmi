@@ -76,6 +76,8 @@ var coordinate = "";
 var scopo = "";
 var categoria = "";
 var audience = "";
+var dettaglio = "";
+var lingua = "";
 var video;
 
 app.post('/auth', lien => {
@@ -88,11 +90,14 @@ app.post('/auth', lien => {
             titolo = lien.req.body.titoloClip;
             coordinate = lien.req.body.coordin;
             scopo = lien.req.body.optionsRadios;
+            lingua = lien.req.body.lan;
             categoria = lien.req.body.cat;
+            dettaglio = lien.req.body.det;
             audience = lien.req.body.aud;
+
             video = lien.req.body.userVideo;
 
-            console.log("######## " + coordinate);
+            console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
         });
 
         //console.log("########: " + titolo + " " + coordinate + " " + scopo + " " + categoria + " " + audience + " video: " + video + " ################# ");
@@ -121,7 +126,7 @@ app.post('/auth', lien => {
 // Handle oauth2 callback
 app.get("/oauth2callback", lien => {
 
-    console.log("*******************" + titolo + " " + scopo + " " + coordinate + " " + categoria + " " + audience + " " + video);
+    console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
 
     Logger.log("Trying to get the token using the following code: " + lien.query.code);
     oauth.getToken(lien.query.code, (err, tokens) => {
@@ -143,8 +148,8 @@ app.get("/oauth2callback", lien => {
                 snippet: {
                     title: titolo,
                     description: "Metadati del video:  Coordinate location: " + coordinate +
-                                 "Scopo clip: " + scopo  + "Categoria: " + categoria + 
-                                 "Audience clip: " + audience + "."
+                                 " -- Scopo: " + scopo + " -- Lingua: " + lingua + " -- Categoria: " + categoria +
+                                 " -- Dettaglio: " + dettaglio + " -- Audience: " + audience
                 }
                 // I don't want to spam my subscribers
                 ,
