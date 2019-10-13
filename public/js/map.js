@@ -151,6 +151,8 @@ function addRoute() {
 
 function cancRoute(){
     currentRoute.spliceWaypoints(0, routes.length);
+    currentRoute.setWaypoints([]);
+    $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
     document.getElementById("cancelRoute").style.visibility = "hidden";
 }
 
