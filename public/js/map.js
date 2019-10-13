@@ -130,6 +130,7 @@ function addRoute() {
         position: 'bottom-center',
         icon: 'success'
       });
+      document.getElementById("cancelRoute").style.visibility = "visible";
     } else {
       $.toast({
         heading: 'Errore',
@@ -146,6 +147,11 @@ function addRoute() {
 
 
   }
+}
+
+function cancRoute(){
+    currentRoute.spliceWaypoints(0, routes.length);
+    document.getElementById("cancelRoute").style.visibility = "hidden";
 }
 
 function backToLogin() {

@@ -9,6 +9,13 @@
     right: 40px;
 }
 
+#cancelRoute {
+    position: absolute;
+    bottom: 100px;
+    right: 40px;
+    visibility: hidden;
+}
+
 #createClip {
     position: absolute;
     bottom: 40px;
