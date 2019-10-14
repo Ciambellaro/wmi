@@ -16,6 +16,7 @@ var routes = [];
 var currentRoute;
 var ID = '';
 var activeRoute = false;
+var jsonList;
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -46,46 +47,9 @@ function onLocationFound(e) {
   console.log(nearest);
   */
   //return position;
-  //initialize();
-  var code = OpenLocationCode.encode(position.lat, position.lng); // codifica coordinate secondo Open Location Code
-  var coord = OpenLocationCode.decode(code);
-  var msg = 'Center is ' + coord.latitudeCenter + ',' + coord.longitudeCenter;
-
-  /*var idVid = 'r8OipmKFDeM';      
-		$(document).ready( function(){
-			$.get("/infoID=" + idVid, function(data){
-				var titolovid="";
-				var datePub="";
-				var descrizione ="";
-				var res = JSON.parse(data);
-				titolovid = res.items[0].snippet.title;
-				datePub = res.items[0].snippet.publishedAt;	
-        descrizione = res.items[0].snippet.description;
-        console.log(titolovid + "***+++---");
-				var date = datePub.split("T");			
-    		$('#scrivititolo').append( titolovid );
-				$('#scrividata').append( date[0] );
-				$('#scrividescrizione').append(descrizione);
-      });
-    });    */
-  console.log(position + " **************")
-  if (position == "LatLng(44.503554, 11.344263)") {
-    openVideoModal();
-  }
+  //initialize();  
 }
 
-//Prende il video e recupera JSON
-function getJson(){
-var url = "https://www.googleapis.com/youtube/v3/videos?part=id%2C+snippet&id=ID&key=<API-KEY>";
-var title;
-var description;
-$.getJSON(url,
-    function(response){
-        title = response.data.items[0].title;
-        description = response.data.items[0].description;
-        console.log(title+"//"+description);
-});
-}
 
 function onLocationError(e) {
   //alert(e.message);
@@ -151,12 +115,12 @@ function addRoute() {
   }
 }
 
-function cancRoute(){
-    activeRoute = false;
-    currentRoute.spliceWaypoints(0, routes.length);
-    currentRoute.setWaypoints([]);
-    $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
-    document.getElementById("cancelRoute").style.visibility = "hidden";
+function cancRoute() {
+  activeRoute = false;
+  currentRoute.spliceWaypoints(0, routes.length);
+  currentRoute.setWaypoints([]);
+  $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
+  document.getElementById("cancelRoute").style.visibility = "hidden";
 }
 
 function backToLogin() {
@@ -280,7 +244,7 @@ map.on('moveend', function (e) {
 
               var textToast = "Meta aggiunta alla lista";
 
-              marker.addTo(layerGroup).on('click', function (e) {
+              marker.addTo(layerGroup).on('click', function (e) {   //quando clicchi su un marker
                 if (editing) {
                   routes.push(markerLocation);
                   $.toast({
@@ -305,20 +269,18 @@ map.on('moveend', function (e) {
                   });
                 }
 
-                if(activeRoute){
+                if (activeRoute) {
                   $.ajax({
                     type: "GET",
                     dataType: "json",
                     url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + posizioneOLC + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
-                    success: function(data){
-                          var jsonList = data;
-                          console.log("DENTRO FUNCTION !");
-                          console.log(jsonList);
-                          var numResults = jsonList.pageInfo.totalResults;
-                          console.log("Numero risultati: " + numResults);
-                          for(var i= 0; i < numResults; i++){
-                            console.log("###### " + jsonList.items[i].id.videoId);
-                          }
+                    success: function (data) {
+                      jsonList = data;
+                      console.log("DENTRO FUNCTION !");
+                      console.log(jsonList);
+                      var numResults = jsonList.pageInfo.totalResults;
+                      console.log("Numero risultati: " + numResults);
+                      sessionStorage.setItem("id", jsonList.items[0].id.videoId);
                     }
                   })
                 }
@@ -333,9 +295,9 @@ map.on('moveend', function (e) {
               console.log("marker #" + exceed);
 
               if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
-                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"]);
+                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><button onclick=play()>Play</button>");
               } else {
-                marker.bindPopup("Questo posto e': " + el.tags.name);
+                marker.bindPopup("Questo posto e': " + el.tags.name + "<br><button onclick=play()>Play</button>");
               }
 
             }
@@ -360,39 +322,7 @@ map.locate({
   maxZoom: 14
 });
 
-//TROVA ID DEL VIDEO DATO L'URL
-function YouTubeGetID(url){
-  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-  if(url[2] !== undefined) {
-    ID = url[2].split(/[^0-9a-z_\-]/i);
-    ID = ID[0];
-  }
-  else {
-    ID = url;
-  }
-  console.log(ID);
-    return ID;
-}
 
-//MODAL DEL VIDEO
-function openVideoModal() {
-  $(document).ready(function () {
-    $('#ModalVideoPlayer').modal('show');
-    var $videoSrc = "https://www.youtube.com/embed/APv1m_fiHLI";
-    YouTubeGetID($videoSrc);
-    //quando si chiude il modal, si stoppa il video 
-    $('#ModalVideoPlayer').on('hide.bs.modal', function (e) {
-      $("#video").attr('src', ""); //viene modificato il src del video, così da non riprodurne nessuno
-    });
-
-    //autoplay del video all'apertura del modal
-    $('#ModalVideoPlayer').on('shown.bs.modal', function (e) {
-      $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");  // set the video src to autoplay and not to show related video.
-    });
-    //document ready  
-    //getJson();
-  });
-}
 
 
 //----------------------------------------------------------------------------------------------------------------
