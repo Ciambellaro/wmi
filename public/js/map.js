@@ -15,6 +15,7 @@ var editing = false;
 var routes = [];
 var currentRoute;
 var ID = '';
+var activeRoute = false;
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -130,6 +131,7 @@ function addRoute() {
         position: 'bottom-center',
         icon: 'success'
       });
+      activeRoute = true;
       document.getElementById("cancelRoute").style.visibility = "visible";
     } else {
       $.toast({
@@ -150,6 +152,7 @@ function addRoute() {
 }
 
 function cancRoute(){
+    activeRoute = false;
     currentRoute.spliceWaypoints(0, routes.length);
     currentRoute.setWaypoints([]);
     $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
@@ -299,6 +302,24 @@ map.on('moveend', function (e) {
                     beforeHide: function () { }, // will be triggered before the toast gets hidden
                     afterHidden: function () { }  // will be triggered after the toast has been hidden
                   });
+                }
+
+                if(activeRoute){
+                  $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC9btEqBUPszNU3oqJCwmgqQ&q=" + el.tags.name + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+                    success: function(data){
+                          var jsonList = data;
+                          console.log("DENTRO FUNCTION !");
+                          console.log(jsonList);
+                          var numResults = jsonList.pageInfo.totalResults;
+                          console.log("Numero risultati: " + numResults);
+                          for(var i= 0; i < numResults; i++){
+                            console.log("###### " + jsonList.items[i].id.videoId);
+                          }
+                    }
+                  })
                 }
 
                 if (addClipMode) {
