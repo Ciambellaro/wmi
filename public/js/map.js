@@ -227,6 +227,7 @@ map.on('moveend', function (e) {
               //console.log(el.tags);
               //creazione del marker per ogni singolo punto di interesse
               var markerLocation = new L.LatLng(el.lat, el.lon);
+              var posizioneOLC = OpenLocationCode.encode(el.lat, el.lon);
 
               if (el.tags.tourism == 'hotel' || el.tags.tourism == 'guest_house') {
                 var redMarker = L.ExtraMarkers.icon({
@@ -308,7 +309,7 @@ map.on('moveend', function (e) {
                   $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC9btEqBUPszNU3oqJCwmgqQ&q=" + el.tags.name + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+                    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + posizioneOLC + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
                     success: function(data){
                           var jsonList = data;
                           console.log("DENTRO FUNCTION !");
@@ -323,7 +324,7 @@ map.on('moveend', function (e) {
                 }
 
                 if (addClipMode) {
-                  openMenu(el.tags.name, " " + markerLocation);
+                  openMenu(el.tags.name, " " + posizioneOLC);
                 }
               });
 
