@@ -147,9 +147,7 @@ app.get("/oauth2callback", lien => {
                 // Video title and description
                 snippet: {
                     title: titolo,
-                    description: "Metadati del video:  Coordinate location: " + coordinate +
-                                 " -- Scopo: " + scopo + " -- Lingua: " + lingua + " -- Categoria: " + categoria +
-                                 " -- Dettaglio: " + dettaglio + " -- Audience: " + audience
+                    description: coordinate + ":" + scopo + ":" + lingua + ":" + categoria + ":" + dettaglio + ":" + audience
                 }
                 // I don't want to spam my subscribers
                 ,
