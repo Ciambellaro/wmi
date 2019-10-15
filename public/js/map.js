@@ -17,6 +17,7 @@ var currentRoute;
 var ID = '';
 var activeRoute = false;
 var jsonList;
+var idVideo;
 //carica e inizializza la mappa base
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -280,7 +281,7 @@ map.on('moveend', function (e) {
                       console.log(jsonList);
                       var numResults = jsonList.pageInfo.totalResults;
                       console.log("Numero risultati: " + numResults);
-                      sessionStorage.setItem("id", jsonList.items[0].id.videoId);
+                      idVideo = jsonList.items[0].id.videoId;
                     }
                   })
                 }
