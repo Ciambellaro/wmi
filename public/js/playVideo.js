@@ -1,3 +1,22 @@
+var idVideo;
+
+function getJson(pos){  // richiesta alla API YTSearch
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + pos + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+        success: function (data) {
+          jsonList = data;
+          console.log("DENTRO FUNCTION !");
+          console.log(jsonList);
+          var numResults = jsonList.pageInfo.totalResults;
+          console.log("Numero risultati: " + numResults);
+          idVideo = jsonList.items[0].id.videoId;
+        }
+      })
+}
+
+
 //APRE IL MODAL DEL VIDEO
 function play() {
     $('#ModalVideoPlayer').modal('show');

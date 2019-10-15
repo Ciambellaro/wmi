@@ -181,29 +181,30 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Modal del video -->
-    <div class="modal fade" id="ModalVideoPlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <!-- 16:9 aspect ratio -->
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay" allowfullscreen="allowfullscreen"></iframe>
+        <!-- Modal del video -->
+        <div class="modal fade" id="ModalVideoPlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <!-- 16:9 aspect ratio -->
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay" allowfullscreen="allowfullscreen"></iframe>
+                        </div>
+                        <br>
+                        <div>
+                            <button type="button" class="btn btn-primary">Prossimo luogo</button>
+                            <button type="button" class="btn btn-primary">Luogo precedente</button>
+                            <button type="button" class="btn btn-primary">Video su stesso luogo</button>
+                        </div>
                     </div>
-                    <div>
-                        <button type="button" class="btn btn-primary">Prossimo luogo</button>
-                        <button type="button" class="btn btn-primary">Luogo precedente</button>
-                        <button type="button" class="btn btn-primary">Video su stesso luogo</button>
-                    </div>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </body>
 
 <script>
@@ -234,5 +235,6 @@
 </script>
 <script src="js/map.js"></script>
 <script src="js/microphone.js"></script>
+<script src="js/playVideo.js"></script>
 
 </html>

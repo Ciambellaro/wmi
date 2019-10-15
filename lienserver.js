@@ -1,4 +1,3 @@
-
 // Dependencies
 const Youtube = require("youtube-api"),
     fs = require('fs'),
@@ -26,7 +25,6 @@ var oauth;
 var auth;
 var access = 0;
 
-
 // Init lien app
 var app = new Lien({
     host: "localhost",
@@ -38,19 +36,8 @@ var app = new Lien({
     }
 });
 
-//app.use(bodyParser.json());       
-//app.use(bodyParser.urlencoded({ extended: false})); 
-
 // I downloaded the file from OAuth2 -> Download JSON
 const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
-
-/*app.get('/', function (req, res) {
-  res.sendfile('login.html'); 
-});
-
-app.get('/map', function (req, res) {
-  res.sendfile('index.html'); 
-});*/
 
 // Listen for load
 app.on("load", function(err) {
@@ -78,7 +65,6 @@ var categoria = "";
 var audience = "";
 var dettaglio = "";
 var lingua = "";
-var video;
 
 app.post('/auth', lien => {
         var upload = multer({
@@ -99,8 +85,6 @@ app.post('/auth', lien => {
 
             console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
         });
-
-        //console.log("########: " + titolo + " " + coordinate + " " + scopo + " " + categoria + " " + audience + " video: " + video + " ################# ");
 
         access += 1;
         oauth = Youtube.authenticate({
@@ -125,8 +109,6 @@ app.post('/auth', lien => {
 
 // Handle oauth2 callback
 app.get("/oauth2callback", lien => {
-
-    console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
 
     Logger.log("Trying to get the token using the following code: " + lien.query.code);
     oauth.getToken(lien.query.code, (err, tokens) => {
@@ -168,16 +150,7 @@ app.get("/oauth2callback", lien => {
             console.log("Done.");
             //process.exit();
         });
-
-        /*setInterval(function() {
-            Logger.log(`${prettyBytes(req.req.connection._bytesDispatched)} bytes uploaded.`);
-        }, 250);*/
-
-        
     });
-
-    
-
 });
 
 // Listen for server errors
