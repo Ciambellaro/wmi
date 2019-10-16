@@ -270,9 +270,7 @@ map.on('moveend', function(e) {
          });
         }
 
-        if (activeRoute) {
-         getJson(posizioneOLC);
-        }
+        getPos(posizioneOLC); // manda l' OLC del marker alla funzione getJson avviata dal click sul bottone PLAY
 
         if (addClipMode) {
          openMenu(el.tags.name, " " + posizioneOLC);
@@ -286,7 +284,7 @@ map.on('moveend', function(e) {
        if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
         marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><button onclick=play()>Play</button>");
        } else {
-        marker.bindPopup("Questo posto e': " + el.tags.name + "<br><button onclick=play()>Play</button>");
+        marker.bindPopup("Questo posto e': " + el.tags.name + "<br><button onclick=getJson()>Play</button>");
        }
 
       }
