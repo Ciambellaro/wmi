@@ -93,6 +93,28 @@ function play() {
     }
   });
 
+  $('#reachThePlace').click(function() {
+    $('#ModalVideoPlayer').modal('hide');
+    if (currentRoute) {  //per rimuovere rettangolo bianco delle indicazioni stradali, se c'è
+      currentRoute.setWaypoints([]);
+      $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
+    }
+    //var posAttuale = OpenLocationCode.encode(position.lat, position.lng);
+    routes = [position];
+    var dec = OpenLocationCode.decode(pos);
+    //LatLng(44.487981, 11.315192)
+    var meta = new L.LatLng(dec.latitudeCenter, dec.longitudeCenter);
+    routes.push(meta);
+    currentRoute = L.Routing.control({
+      waypoints: routes,
+      createMarker: function() {
+       return null;
+      }
+    }).addTo(map);
+    activeRoute = true;
+    document.getElementById("cancelRoute").style.visibility = "visible";
+  });
+
   $('#ModalVideoPlayer').modal('show');
 }
 

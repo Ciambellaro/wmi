@@ -33,7 +33,7 @@
 <body>
     <div align="center">
         <div id="map" class="embed-responsive embed-responsive-1by1">
-
+            <!-- BOTTONI IN SOVRAIMPRESSIONE SULLA MAPPA -->
             <div id="RouteDiv" class="leaflet-bottom leaflet-right" style="pointer-events: auto">
                 <button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute()" title="Crea un percorso">
                     <i class="glyphicon glyphicon-road" id="routeIcon"></i>
@@ -58,6 +58,16 @@
                         <p id="tipoDiAccesso"></p>
                         <div class="dropdown-divider"></div>
                         <button type="button" class="btn btn-info" onclick="backToLogin()">Esci</button>
+                    </div>
+                </div>
+            </div>
+            <div id="VideoListDiv" class="leaflet-top leaflet-right" style="pointer-events: auto">
+                <div class="dropdown">
+                    <button type="button" class="btn btn-success btn-circle btn-lg" id="VideoListdropdownMenuButton" onClick="openVideoListMenu()" title="Lista video nei dintorni" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-th-list" id="videoListIcon"></i>
+                    </button>
+                    <div id="dropDownVideoList" class="dropdown-menu" aria-labelledby="VideoListdropdownMenuButton">
+                        <p>Si volaaaaaa</p>
                     </div>
                 </div>
             </div>
@@ -181,7 +191,7 @@
                 </div>
             </div>
         </div>
-        <!-- Modal del video -->
+        <!-- MODAL PER LA VISUALIZZAZIONE DEL VIDEO -->
         <div class="modal fade" id="ModalVideoPlayer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -196,6 +206,7 @@
                         <br>
                         <button id="prevClip" type="button" class="btn btn-primary"> <<< </button>
                         <button id="nextClip" type="button" class="btn btn-primary"> >>> </button>
+                        <button id="reachThePlace" type="button" class="btn btn-danger">Raggiungi il luogo</button>
                         <br>
                         <form>
                             <label>Filtra clip per:  (what default)</label>
