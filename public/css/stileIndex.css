@@ -22,6 +22,19 @@
     left: 40px;
 }
 
+#listDD {
+    position: absolute;
+    top: 40px;
+    right: 120px;
+}
+
+#dropDownVideoList {
+    position: absolute;
+    right: 120px;
+    text-align: center;
+    padding: 10px;
+}
+
 #dropdownMenuButton {
     position: absolute;
     top: 40px;

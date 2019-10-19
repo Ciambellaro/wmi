@@ -2,19 +2,15 @@ var idVideo;
 var whatVideo = [];
 var howVideo = [];
 var whyVideo = [];
-var pos;
+var pos
 
-
-function getPos(posizione) {
-  pos = posizione;
-}
-
-function getJson() {  // richiesta alla API YTSearch
+function getJson(p) {  // richiesta alla API YTSearch
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + pos + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
     success: function (data) {
+      pos = p;
       var jsonList = data;
       var numResults = jsonList.pageInfo.totalResults;
       if (numResults > 0) {
