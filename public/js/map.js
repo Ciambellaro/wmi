@@ -259,6 +259,7 @@ map.on('moveend', function(e) {
                             if (yetdiscovered == false) {
                                 marker.addTo(layerGroup);
                                 discovered.push(placename);
+                                marker.bounce(1);
                                 console.log("****SCOPERTO: " + placename + " ****");
                                 console.log("marker #" + exceed + " " + placename);
 
