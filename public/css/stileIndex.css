@@ -29,11 +29,52 @@
 }
 
 #dropDownVideoList {
+    width: 400px;
     position: absolute;
     right: 120px;
     text-align: center;
     padding: 10px;
 }
+
+#btnList {
+    margin: 5px;
+}
+
+.example_f {
+    border-radius: 4px;
+    background: linear-gradient(to right, #67b26b, #4ca2cb) !important;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 15px;
+    padding: 2px;
+    width: 70%;
+    transition: all 0.4s;
+    cursor: pointer;
+    margin: 20px;
+  }
+  .example_f span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.4s;
+  }
+  .example_f span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+  }
+  .example_f:hover span {
+    padding-right: 25px;
+  }
+  .example_f:hover span:after {
+    opacity: 1;
+    right: 0;
+  }
 
 #dropdownMenuButton {
     position: absolute;

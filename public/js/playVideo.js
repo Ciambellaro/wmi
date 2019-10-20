@@ -8,7 +8,7 @@ function getJson(p) {  // richiesta alla API YTSearch
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyAh6dqWLmaRoAVRpy0j8cIJyWe4ZVpGC-Y",
     success: function (data) {
       pos = p;
       var jsonList = data;
@@ -18,18 +18,19 @@ function getJson(p) {  // richiesta alla API YTSearch
           var split = jsonList.items[i].snippet.description.split(":");
           var purpose = split[1];
           switch (purpose) {
-            case "How":
+            case "how":
               howVideo.push(jsonList.items[i].id.videoId);
               break;
-            case "Why":
+            case "why":
               whyVideo.push(jsonList.items[i].id.videoId);
               break;
             default:
               whatVideo.push(jsonList.items[i].id.videoId);
           }
         }
+        play(); // fa partire effettivamente il video
       }
-      play(); // fa partire effettivamente il video
+      
     }
   })
 }
@@ -51,11 +52,11 @@ function play() {
     var selectedPurpose = $(this).children("option:selected").val();
     console.log("Filtra per: " + selectedPurpose);
     switch (selectedPurpose) {
-      case "How":
+      case "how":
         list = howVideo;
         index = 0;
         break;
-      case "Why":
+      case "why":
         list = whyVideo;
         index = 0;
         break;
