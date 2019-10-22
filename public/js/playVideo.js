@@ -8,7 +8,7 @@ function getJson(p,flag) {  // richiesta alla API YTSearch
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyAh6dqWLmaRoAVRpy0j8cIJyWe4ZVpGC-Y",
+    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
     success: function (data) {
       pos = p;
       var jsonList = data;
