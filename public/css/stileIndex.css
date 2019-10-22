@@ -42,10 +42,12 @@
 }
 
 #btnPrev {
+    float: left;
     visibility: visible;
 }
 
 #btnNext {
+    float: right;
     visibility: visible;
 }
 

@@ -74,6 +74,7 @@ function onLocationError(e) {
 }
 
 function nextRoute() {
+
     if(currentRoute != null){
         currentRoute.spliceWaypoints(0, routes.length);
         currentRoute.setWaypoints([]);
@@ -99,10 +100,16 @@ function nextRoute() {
     if(indexRoute + 1 >= routes.length) {
         $("#btnNext").attr("disabled", true);
     }
+    if(indexRoute == 1){
+        $("#btnPrev").attr("disabled", true);
+    } else {
+        $("#btnPrev").attr("disabled", false);
+    }
 
 }
 
 function prevRoute(){
+    $("#btnNext").attr("disabled", false);
     if(currentRoute != null){
         currentRoute.spliceWaypoints(0, routes.length);
         currentRoute.setWaypoints([]);
@@ -126,7 +133,7 @@ function prevRoute(){
         var print = "<p><b>TAPPA N° "+ indexRoute +" DEL PERCORSO.</b></p>"
         $('.leaflet-routing-container.leaflet-bar.leaflet-control').prepend(print);
     }
-    if(indexRoute <= 0){
+    if(indexRoute = 1){
         $("#btnPrev").attr("disabled", true);
     }
 }
@@ -405,7 +412,7 @@ function dropDown() {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + pOLC + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
+            url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + pOLC + "&type=video&key=AIzaSyAh6dqWLmaRoAVRpy0j8cIJyWe4ZVpGC-Y",
             success: function (data) {
                 var jsonList = data;
                 var numResults = jsonList.pageInfo.totalResults;
