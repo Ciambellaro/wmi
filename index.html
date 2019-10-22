@@ -40,7 +40,7 @@
                 </button>
             </div>
             <div id="RouteBtn" class="leaflet-bottom leaflet-right" style="pointer-events: auto">
-                <button type="button" class="btn btn-warning btn-circle btn-lg" id="cancelRoute" onClick="cancRoute()" title="Cancella il percorso">
+                <button type="button" class="btn btn-danger btn-circle btn-lg" id="cancelRoute" onClick="cancRoute()" title="Cancella il percorso">
                     <i class="glyphicon glyphicon-remove" id="cancrouteIcon"></i>
                 </button>
             </div>
@@ -205,26 +205,37 @@
                         <br>
                         <button id="prevClip" type="button" class="btn btn-primary"> <<< </button>
                         <button id="nextClip" type="button" class="btn btn-primary"> >>> </button>
-                        <button id="reachThePlace" type="button" class="btn btn-danger">Raggiungi il luogo</button>
+                        <div class="float-right"><button id="reachThePlace" type="button" class="btn btn-danger">Raggiungi il luogo</button></div>
                         <br>
                         <form>
                             <label>Filtra clip per:  (what default)</label>
                             <select id="filtra" class="filterPurpose" name="filtra">
                                 <option selected="selected" value="what">What</option>
-                                <option value="wow">How</option>
+                                <option value="how">How</option>
                                 <option value="why">Why</option>
                             </select>
                         </fomr>
                         <br>
                         <div>
-                            <button type="button" class="btn btn-primary">Prossimo luogo</button>
-                            <button type="button" class="btn btn-primary">Luogo precedente</button>
-                            <button type="button" class="btn btn-primary">Video su stesso luogo</button>
+                            <button id="btnPrev" type="button" class="btn btn-primary" onclick="prevRoute()">Luogo precedente</button>
+                            <button id="btnNext" type="button" class="btn btn-primary" onclick="nextRoute()">Prossimo luogo</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="noCLipModal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                <div class="modal-body">
+                  <p id="err"><b>NESSUNA CLIP PER QUESTO LUOGO.</b></p>
+                </div>
+              </div>
+            </div>
+          </div>
         
     </div>
 

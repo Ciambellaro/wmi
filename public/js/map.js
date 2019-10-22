@@ -15,7 +15,7 @@ var count = 0;
 var editing = false;
 var routes = [];
 var currentRoute;
-var ID = '';
+var indexRoute = 0;
 var activeRoute = false;
 var clipAround = [];
 var discovered = [];
@@ -29,9 +29,9 @@ var discovered = [];
 }).addTo(map);*/
 
 L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
-  attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
-  minZoom: 1,
-  maxZoom: 19
+    attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+    minZoom: 1,
+    maxZoom: 19
 }).addTo(map);
 
 function onLocationFound(e) {
@@ -46,7 +46,17 @@ function onLocationFound(e) {
     var circle = L.circle(e.latlng, radius);
     circle.addTo(layerGroupPos);
 
+
     marker.bindPopup("Ti trovi qui in un raggio di " + radius + " metri").openPopup();
+    var c = "" + e.latlng;
+    var s = c.split(",");
+    var ss = s[0].split("(");
+    var lat = ss[1];
+    var sss = s[1].split(")");
+    var lon = sss[0];
+    console.log("LAT: " + lat + " LON: " + lon);
+    var OLC = OpenLocationCode.encode(lat, lon);
+    //getJson(OLC,true); // fa partire in automatico la clip se nella posizione in cui ci troviamo ne è presente una 
     //L.circle(e.latlng, radius).addTo(map);
     //+++GET NEARBY PLACES+++
     /*
@@ -63,11 +73,68 @@ function onLocationError(e) {
     //alert(e.message);
 }
 
+function nextRoute() {
+    if(currentRoute != null){
+        currentRoute.spliceWaypoints(0, routes.length);
+        currentRoute.setWaypoints([]);
+    }
+    if (indexRoute + 1 < routes.length) {
+        $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
+        $('#ModalVideoPlayer').modal('hide');
+        var partRoute = [];
+        partRoute[0] = routes[indexRoute];
+        partRoute[1] = routes[indexRoute + 1];
+        indexRoute++;
+        console.log("INDEX: " + indexRoute);
+        currentRoute = L.Routing.control({
+            waypoints: partRoute,
+            createMarker: function () {
+                return null;
+            }
+        }).addTo(map);
+
+        var print = "<p><b>TAPPA N° "+ indexRoute +" DEL PERCORSO.</b></p>"
+        $('.leaflet-routing-container.leaflet-bar.leaflet-control').prepend(print);
+    } 
+    if(indexRoute + 1 >= routes.length) {
+        $("#btnNext").attr("disabled", true);
+    }
+
+}
+
+function prevRoute(){
+    if(currentRoute != null){
+        currentRoute.spliceWaypoints(0, routes.length);
+        currentRoute.setWaypoints([]);
+    }
+    if(indexRoute-1 > 0){
+        $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
+        $('#ModalVideoPlayer').modal('hide');
+        var partRoute = [];
+        partRoute[0] = routes[indexRoute];
+        partRoute[1] = routes[indexRoute - 1];
+        console.log("PART: " + partRoute + " INDICE PRIMA: " + indexRoute);
+        indexRoute--;
+        console.log("INDEX: " + indexRoute);
+        currentRoute = L.Routing.control({
+            waypoints: partRoute,
+            createMarker: function () {
+                return null;
+            }
+        }).addTo(map);
+
+        var print = "<p><b>TAPPA N° "+ indexRoute +" DEL PERCORSO.</b></p>"
+        $('.leaflet-routing-container.leaflet-bar.leaflet-control').prepend(print);
+    }
+    if(indexRoute <= 0){
+        $("#btnPrev").attr("disabled", true);
+    }
+}
+
 function addRoute() {
     if (!editing) {
-        //alert("modalità edit attivata");
         editing = true;
-        routes = [position];
+        routes = [position];  //routes[0]
 
         $.toast({
             heading: 'Informazione',
@@ -82,7 +149,6 @@ function addRoute() {
 
 
     } else {
-        //alert("modalità edit disattivata");
         editing = false;
 
         if (currentRoute) {
@@ -91,12 +157,7 @@ function addRoute() {
         }
 
         if (routes.length > 1) {
-            currentRoute = L.Routing.control({
-                waypoints: routes,
-                createMarker: function() {
-                    return null;
-                }
-            }).addTo(map);
+            nextRoute();  //disegna il percorso sulla mappa
 
             $.toast({
                 heading: 'Perfetto!',
@@ -127,6 +188,7 @@ function addRoute() {
 
 function cancRoute() {
     activeRoute = false;
+    indexRoute = 0;
     currentRoute.spliceWaypoints(0, routes.length);
     currentRoute.setWaypoints([]);
     $('.leaflet-routing-container.leaflet-bar.leaflet-control').remove();
@@ -167,7 +229,7 @@ map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
 
 
-map.on('moveend', function(e) {
+map.on('moveend', function (e) {
     clipAround = [];
     //layerGroup.clearLayers();
     $("#dropDownVideoList").empty();
@@ -185,14 +247,14 @@ map.on('moveend', function(e) {
         dataType: "json",
         url: urlOverpass,
         //url: "https://overpass-api.de/api/interpreter?data=[out:json];(node(11,50,11.1,50.1);<;);out meta;",
-        success: function(data) {
+        success: function (data) {
             //data = JSON.parse(data);
             count += 1;
             console.log("richiesta overpass #" + count);
             //console.log(urlOverpass);
             if (data.elements.length != 0) {
                 var exceed = 0;
-                $.each(data.elements, function(index, el) {
+                $.each(data.elements, function (index, el) {
                     console.log(el);
                     if (el.tags) {
                         if (el.tags.name && el.tags.tourism && el.tags.tourism != "hotel" && el.tags.tourism != "guest_house" && el.tags.tourism != "information") {
@@ -268,7 +330,7 @@ map.on('moveend', function(e) {
                                 console.log("****SCOPERTO: " + placename + " ****");
                                 console.log("marker #" + exceed + " " + placename);
 
-                                marker.on('click', function(e) { //quando clicchi su un marker
+                                marker.on('click', function (e) { //quando clicchi su un marker
                                     if (editing) {
                                         routes.push(markerLocation);
                                         $.toast({
@@ -285,10 +347,10 @@ map.on('moveend', function(e) {
                                             textAlign: 'left', // Text alignment i.e. left, right or center
                                             loader: true, // Whether to show loader or not. True by default
                                             loaderBg: '#9EC600', // Background color of the toast loader
-                                            beforeShow: function() {}, // will be triggered before the toast is shown
-                                            afterShown: function() {}, // will be triggered after the toat has been shown
-                                            beforeHide: function() {}, // will be triggered before the toast gets hidden
-                                            afterHidden: function() {} // will be triggered after the toast has been hidden
+                                            beforeShow: function () { }, // will be triggered before the toast is shown
+                                            afterShown: function () { }, // will be triggered after the toat has been shown
+                                            beforeHide: function () { }, // will be triggered before the toast gets hidden
+                                            afterHidden: function () { } // will be triggered after the toast has been hidden
                                         });
                                     }
 
@@ -304,9 +366,9 @@ map.on('moveend', function(e) {
 
 
                             if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
-                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><button onclick=play()>Play</button>");
+                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
                             } else {
-                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br><button onclick={getJson('" + posizioneOLC + "')}>Play</button>");
+                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
                             }
 
                         }
@@ -334,10 +396,6 @@ map.locate({
     maxZoom: 14
 });
 
-function aj(p) {
-
-}
-
 function dropDown() {
     var html;
     for (var k = 0; k < clipAround.length; k++) {
@@ -348,7 +406,7 @@ function dropDown() {
             type: "GET",
             dataType: "json",
             url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + pOLC + "&type=video&key=AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
-            success: function(data) {
+            success: function (data) {
                 var jsonList = data;
                 var numResults = jsonList.pageInfo.totalResults;
                 if (numResults > 0) {
@@ -357,7 +415,8 @@ function dropDown() {
                         var purpose = split[1];
                         if (purpose == "what") {
                             var ss = jsonList.items[i].snippet.description.split(":");
-                            html += "<div class='button_cont' align='center' onclick={getJson('"+ ss[0] +"')}><a class='example_f' target='_blank' rel='nofollow'><span>"+jsonList.items[i].snippet.title+"</a></div>";                            document.getElementById("dropDownVideoList").innerHTML = html;
+                            html += "<button id='btnList' type='button' class='btn btn-primary' onclick={getJson('" + ss[0] + "')}>" + jsonList.items[i].snippet.title + "</button><br>"
+                            document.getElementById("dropDownVideoList").innerHTML = html;
                         }
                     }
                 }
@@ -432,11 +491,11 @@ function dropDown() {
  *   var code = OpenLocationCode.recoverNearest('9G8F+6X', 47.4, 8.6);
  *   var code = OpenLocationCode.recoverNearest('8F+6X', 47.4, 8.6);
  */
-(function(root, factory) {
+(function (root, factory) {
     /* global define, module */
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['b'], function(b) {
+        define(['b'], function (b) {
             return (root.returnExportsGlobal = factory(b));
         });
     } else if (typeof module === 'object' && module.exports) {
@@ -448,7 +507,7 @@ function dropDown() {
         // Browser globals
         root.OpenLocationCode = factory();
     }
-}(this, function() {
+}(this, function () {
     var OpenLocationCode = {};
 
     /**
@@ -537,7 +596,7 @@ function dropDown() {
     /**
       @return {string} Returns the OLC alphabet.
      */
-    OpenLocationCode.getAlphabet = function() {
+    OpenLocationCode.getAlphabet = function () {
         return CODE_ALPHABET_;
     };
 
@@ -551,7 +610,7 @@ function dropDown() {
      * @param {string} code The string to check.
      * @return {boolean} True if the string is a valid code.
      */
-    var isValid = OpenLocationCode.isValid = function(code) {
+    var isValid = OpenLocationCode.isValid = function (code) {
         if (!code || typeof code !== 'string') {
             return false;
         }
@@ -619,7 +678,7 @@ function dropDown() {
      * @return {boolean} True if the string can be produced by removing four or
      *     more characters from the start of a valid code.
      */
-    var isShort = OpenLocationCode.isShort = function(code) {
+    var isShort = OpenLocationCode.isShort = function (code) {
         // Check it's valid.
         if (!isValid(code)) {
             return false;
@@ -639,7 +698,7 @@ function dropDown() {
      * @return {boolean} True if the code represents a valid latitude and
      *     longitude combination.
      */
-    var isFull = OpenLocationCode.isFull = function(code) {
+    var isFull = OpenLocationCode.isFull = function (code) {
         if (!isValid(code)) {
             return false;
         }
@@ -681,7 +740,7 @@ function dropDown() {
      * @return {string} The code.
      * @throws {Exception} if any of the input values are not numbers.
      */
-    var encode = OpenLocationCode.encode = function(latitude,
+    var encode = OpenLocationCode.encode = function (latitude,
         longitude, codeLength) {
         latitude = Number(latitude);
         longitude = Number(longitude);
@@ -769,7 +828,7 @@ function dropDown() {
      *     area of the code.
      * @throws {Exception} If the code is not valid.
      */
-    var decode = OpenLocationCode.decode = function(code) {
+    var decode = OpenLocationCode.decode = function (code) {
         // This calculates the values for the pair and grid section separately, using
         // integer arithmetic. Only at the final step are they converted to floating
         // point and combined.
@@ -850,7 +909,7 @@ function dropDown() {
      * @throws {Exception} if the short code is not valid, or the reference
      *     position values are not numbers.
      */
-    OpenLocationCode.recoverNearest = function(
+    OpenLocationCode.recoverNearest = function (
         shortCode, referenceLatitude, referenceLongitude) {
         if (!isShort(shortCode)) {
             if (isFull(shortCode)) {
@@ -924,7 +983,7 @@ function dropDown() {
      * @throws {Exception} if the passed code is not a valid full code or the
      *     reference location values are not numbers.
      */
-    OpenLocationCode.shorten = function(
+    OpenLocationCode.shorten = function (
         code, latitude, longitude) {
         if (!isFull(code)) {
             throw new Error('ValueError: Passed code is not valid and full: ' + code);
@@ -969,7 +1028,7 @@ function dropDown() {
      * @param {number} latitude
      * @return {number} The latitude value clipped to be in the range.
      */
-    var clipLatitude = function(latitude) {
+    var clipLatitude = function (latitude) {
         return Math.min(90, Math.max(-90, latitude));
     };
 
@@ -981,7 +1040,7 @@ function dropDown() {
      * @param {number} codeLength
      * @return {number} The latitude precision in degrees.
      */
-    var computeLatitudePrecision = function(codeLength) {
+    var computeLatitudePrecision = function (codeLength) {
         if (codeLength <= 10) {
             return Math.pow(ENCODING_BASE_, Math.floor(codeLength / -2 + 2));
         }
@@ -994,7 +1053,7 @@ function dropDown() {
      * @param {number} longitude
      * @return {number} Normalized into the range -180 to 180.
      */
-    var normalizeLongitude = function(longitude) {
+    var normalizeLongitude = function (longitude) {
         while (longitude < -180) {
             longitude = longitude + 360;
         }
@@ -1018,13 +1077,13 @@ function dropDown() {
      *
      * @constructor
      */
-    var CodeArea = OpenLocationCode.CodeArea = function(
+    var CodeArea = OpenLocationCode.CodeArea = function (
         latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength) {
         return new OpenLocationCode.CodeArea.fn.Init(
             latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength);
     };
     CodeArea.fn = CodeArea.prototype = {
-        Init: function(
+        Init: function (
             latitudeLo, longitudeLo, latitudeHi, longitudeHi, codeLength) {
             /**
              * The latitude of the SW corner.

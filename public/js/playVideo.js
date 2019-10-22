@@ -4,11 +4,11 @@ var howVideo = [];
 var whyVideo = [];
 var pos
 
-function getJson(p) {  // richiesta alla API YTSearch
+function getJson(p,flag) {  // richiesta alla API YTSearch
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "&type=video&key=AIzaSyAh6dqWLmaRoAVRpy0j8cIJyWe4ZVpGC-Y",
+    url: "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" + p + "AIzaSyDreBoGIWh_o3liIimrcRFJF3R5M2xqOlw",
     success: function (data) {
       pos = p;
       var jsonList = data;
@@ -29,6 +29,8 @@ function getJson(p) {  // richiesta alla API YTSearch
           }
         }
         play(); // fa partire effettivamente il video
+      } else if( numResults == 0 &&  flag != true){
+        $('#noCLipModal').modal('show');
       }
       
     }
@@ -41,6 +43,12 @@ function play() {
   var $videoSrc;
   var list = whatVideo;  // di default i video visualizzati sono i WHAT
   $videoSrc = "https://www.youtube.com/embed/" + list[index];
+  
+  if(activeRoute == false){
+    document.getElementById("btnPrev").style.visibility = "hidden";
+    document.getElementById("btnNext").style.visibility = "hidden";
+  }
+
 
   //autoplay del video all'apertura del modal
   $('#ModalVideoPlayer').on('shown.bs.modal', function (e) {
