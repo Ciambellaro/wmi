@@ -159,26 +159,25 @@
                                     <option value="scl">Specialisti del settore</option>
                                 </select>
                             </div>
-                            <div class="left">
-                                <div id="startButton" class="button">
-                                    Start
-                                </div>
-                                <h2>Preview</h2>
-                                <video id="preview" width="160" height="120" autoplay muted></video>
-                            </div>
-                            <!-- chiusura left-->
-                            <div class="right">
-                                <div id="stopButton" class="button">
-                                    Stop
-                                </div>
-                                <h2>Recording</h2>
-                                <video id="recording" width="160" height="120" controls></video>
-                                <a id="downloadButton" class="button">
-                                    Download
-                                </a>
-                            </div>
-                            <!-- chiusura right-->
                             <br>
+
+
+                            <table id="videoRec" align="center">
+                                <tr>
+                                    <td><button type="button" id="startButton" class="btn btn-success">Registra</button></td>
+                                    <td><button type="button" id="stopButton" class="btn btn-danger">Stop</button></td>
+                                </tr>
+                                <tr>
+                                    <td><video id="preview" width="160" height="120" autoplay muted></video></td>
+                                    <td><video id="recording" width="160" height="120" controls></video></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><a id="downloadButton" class="button">Download</a></td>
+                                </tr>
+                            </table>
+
+                            <br>
+
                             <label for="avatar">Scegli un video da caricare:</label>
                             <input type="file" id="userVideo" name="userVideo" accept="video/*">
                             <div class="modal-footer">

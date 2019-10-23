@@ -120,47 +120,65 @@
 }
 
 .left {
-    margin-right: 10px;
+    margin-left: 10px;
     float: left;
-    width: 160px;
+    width: 200px;
     padding: 0px;
   }
   
-  .right {
-    margin-left: 10px;
-    float: left;
-    width: 160px;
+.right {
+    margin-right: 10px;
+    float: right;
+    width: 200px;
     padding: 0px;
   }
 
 #startButton{
-    cursor: pointer;
-    display: block;
-    width: 160px;
+    /*
     border: 1px solid black;
     font-size: 16px;
-    text-align: center;
     padding-top: 2px;
     padding-bottom: 4px;
     color: white;
     background-color: darkgreen;
+    */
+    width: 160px;
+    text-align: center;
+    cursor: pointer;
+    display: block;
 }
 
 #stopButton{
-    cursor: pointer;
-    display: block;
-    width: 160px;
+    /*
     border: 1px solid black;
     font-size: 16px;
-    text-align: center;
     padding-top: 2px;
     padding-bottom: 4px;
     color: white;
     background-color: red;
+    */
+    width: 160px;
+    text-align: center;
+    cursor: pointer;
+    display: block;
 }
+
+#videoRec td {
+    text-align: center;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#containerVideoRec {
+    text-align: center;
+
+}
+
 
 .bottom {
     clear: both;
     padding-top: 10px;
-  }
+}
       
