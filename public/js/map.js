@@ -42,6 +42,9 @@ function onLocationFound(e) {
     //var marker = L.marker(e.latlng).addTo(map)
     var marker = L.marker(e.latlng);
     marker.addTo(layerGroupPos);
+    marker.setBouncingOptions({
+      bounceHeight: 5
+    }).bounce();
 
     var circle = L.circle(e.latlng, radius);
     circle.addTo(layerGroupPos);
@@ -330,6 +333,12 @@ map.on('moveend', function (e) {
                                 }
                             }
 
+                            if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
+                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
+                            } else {
+                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
+                            }
+
                             if (yetdiscovered == false) {
                                 marker.addTo(layerGroup);
                                 discovered.push(placename);
@@ -359,7 +368,9 @@ map.on('moveend', function (e) {
                                             beforeHide: function () { }, // will be triggered before the toast gets hidden
                                             afterHidden: function () { } // will be triggered after the toast has been hidden
                                         });
+                                        marker.closePopup();
                                     }
+                                    marker.bounce(1);
 
                                     if (addClipMode) {
                                         openMenu(placename, " " + posizioneOLC);
@@ -370,13 +381,6 @@ map.on('moveend', function (e) {
 
                             var tags = el.tags;
                             console.log("***SCOPERTI: " + discovered);
-
-
-                            if (el.tags["addr:city"] && el.tags["addr:country"] && el.tags["addr:housenumber"] && el.tags["addr:postcode"] && el.tags["addr:street"]) {
-                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br>" + el.tags["addr:street"] + ", " + el.tags["addr:housenumber"] + ", " + el.tags["addr:postcode"] + " " + el.tags["addr:city"] + " " + el.tags["addr:country"] + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
-                            } else {
-                                marker.bindPopup("Questo posto e': " + el.tags.name + "<br><div id='align'><button id='btPop' type='button' class='btn btn-primary' onclick={getJson('" + posizioneOLC + "')}>PLAY</button></div>");
-                            }
 
                         }
                     }
