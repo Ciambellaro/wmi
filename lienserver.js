@@ -1,26 +1,27 @@
 // Dependencies
-const Youtube = require("youtube-api"),
-    fs = require('fs'),
+const Youtube = require("youtube-api")
+fs = require('fs'),
     readJson = require("r-json"),
     Lien = require("lien"),
     Logger = require("bug-killer"),
     opn = require("opn"),
     prettyBytes = require("pretty-bytes");
+mongo = require('mongodb').MongoClient;
+
+const url = "mongodb://localhost:27017/";
 
 var express = require('express');
 var app = express();
 var multer = require('multer');
 var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null,  __dirname + "/public/uploads");
-     },
+    destination: function (req, file, cb) {
+        cb(null, __dirname + "/public/uploads");
+    },
     filename: function (req, file, cb) {
         console.log(file);
-        cb(null , "video.mp4");
+        cb(null, "video.mp4");
     }
 });
-const bodyParser = require('body-parser');
-var url = require('url');
 var oauth;
 var auth;
 var access = 0;
@@ -40,7 +41,7 @@ var app = new Lien({
 const CREDENTIALS = readJson(`${__dirname}/credentials.json`);
 
 // Listen for load
-app.on("load", function(err) {
+app.on("load", function (err) {
     console.log(err || "server started on port 8443.");
     err && process.exit(1);
 });
@@ -52,10 +53,73 @@ app.get('/', lien => {
     lien.file(`${__dirname}/login.html`);
 });
 
-//app.get("/map", `${__dirname}/index.html`);
+app.post('/', lien => {
+
+    // gestione form registrati
+    var user = "";
+    var pwd = "";
+    var tipo = "";
+    user = lien.req.body.username;
+    pwd = lien.req.body.pass;
+    tipo = lien.req.body.tipologia;
+    console.log("### " + user + " " + pwd + " " + tipo);
+
+    var dbo = db.db("registrazioni");
+
+    if(user != null && pwd != null && tipo != null){
+        mongo.connect(url, function (err, db) {
+            if (err) throw err;
+            
+            var control = { username: user };
+            dbo.collection("registrazioni").find(control).toArray(function (err, result) {
+                if (err) throw err;
+                console.log("RESULT CONTROL:" + result);
+                if (result == "") {
+                    var myobj = { username: user, password: pwd, tipologia: tipo };
+                    dbo.collection("registrazioni").insertOne(myobj, function (err, res) {
+                        if (err) throw err;
+                        console.log("inserito utente");
+                        console.log("Username: " + myobj.username + " " + "Password: " + myobj.password + " " + "Tipologia: " + myobj.tipologia);
+                        db.close();
+                        lien.redirect("/");
+                    });
+                } else {
+                    console.log(" ########### UTENTE GIA' ESISTENTE ! ##############");
+                }
+                db.close();
+            });
+    
+            var query = { username: user };
+            dbo.collection("registrazioni").find().toArray(function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                db.close();
+            });
+        });
+        
+    }
+    
+
+    // gestione form accedi
+    var usernameLogin = "";
+    var passwordLogin = "";
+    usernameLogin = lien.req.body.userLogin;
+    passwordLogin = lien.req.body.pwdLogin;
+
+    console.log("### " + usernameLogin + " " + passwordLogin);
+    var queryLogin = { username: user };
+    dbo.collection("registrazioni").find(queryLogin).toArray(function (err, result) {
+        if (err) throw err;
+        console.log("@@@@ " + result.password);
+        db.close();
+    });
+
+
+
+});
 
 app.get('/map', lien => {
-        lien.file(`${__dirname}/index.html`);
+    lien.file(`${__dirname}/index.html`);
 });
 
 var titolo = "";
@@ -67,44 +131,44 @@ var dettaglio = "";
 var lingua = "";
 
 app.post('/auth', lien => {
-        var upload = multer({
-            storage: storage
-        }).single('userVideo');
-        upload(lien.req, lien.res, function(err) {
-            //lien.res.end('File is uploaded')
-            console.log("File is uploaded");
-            titolo = lien.req.body.titoloClip;
-            coordinate = lien.req.body.coordin;
-            scopo = lien.req.body.optionsRadios;
-            lingua = lien.req.body.lan;
-            categoria = lien.req.body.cat;
-            dettaglio = lien.req.body.det;
-            audience = lien.req.body.aud;
+    var upload = multer({
+        storage: storage
+    }).single('userVideo');
+    upload(lien.req, lien.res, function (err) {
+        //lien.res.end('File is uploaded')
+        console.log("File is uploaded");
+        titolo = lien.req.body.titoloClip;
+        coordinate = lien.req.body.coordin;
+        scopo = lien.req.body.optionsRadios;
+        lingua = lien.req.body.lan;
+        categoria = lien.req.body.cat;
+        dettaglio = lien.req.body.det;
+        audience = lien.req.body.aud;
 
-            video = lien.req.body.userVideo;
+        video = lien.req.body.userVideo;
 
-            console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
-        });
+        console.log("*******************" + titolo + " " + coordinate + " " + scopo + " " + lingua + " " + categoria + " " + dettaglio + " " + audience + " " + video);
+    });
 
-        access += 1;
-        oauth = Youtube.authenticate({
-            type: "oauth",
-            client_id: CREDENTIALS.web.client_id,
-            client_secret: CREDENTIALS.web.client_secret,
-            redirect_url: CREDENTIALS.web.redirect_uris[0]
-        });
+    access += 1;
+    oauth = Youtube.authenticate({
+        type: "oauth",
+        client_id: CREDENTIALS.web.client_id,
+        client_secret: CREDENTIALS.web.client_secret,
+        redirect_url: CREDENTIALS.web.redirect_uris[0]
+    });
 
-        auth = oauth.generateAuthUrl({
-            access_type: "offline",
-            scope: ["https://www.googleapis.com/auth/youtube.upload"]
-        });
+    auth = oauth.generateAuthUrl({
+        access_type: "offline",
+        scope: ["https://www.googleapis.com/auth/youtube.upload"]
+    });
 
-        console.log(auth);
-        console.log(oauth);
-        opn(auth);
+    console.log(auth);
+    console.log(oauth);
+    opn(auth);
 
-       
-        lien.redirect("/map");
+
+    lien.redirect("/map");
 });
 
 // Handle oauth2 callback
@@ -141,10 +205,10 @@ app.get("/oauth2callback", lien => {
             ,
             part: "snippet,status"
 
-                // Create the readable stream to upload the video
-                ,
+            // Create the readable stream to upload the video
+            ,
             media: {
-                body: fs.createReadStream( __dirname + "/public/uploads/video.mp4")
+                body: fs.createReadStream(__dirname + "/public/uploads/video.mp4")
             }
         }, (err, data) => {
             console.log("Done.");

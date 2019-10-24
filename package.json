@@ -13,6 +13,7 @@
     "leaflet-geometryutil": "^0.9.1",
     "lien": "^3.3.0",
     "mocha": "^6.2.1",
+    "mongodb": "^3.3.3",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "opn": "^6.0.0",
@@ -22,7 +23,9 @@
     "supertest": "~1.1.0",
     "youtube-api": "^2.0.10"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.11.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
