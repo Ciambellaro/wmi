@@ -202,22 +202,36 @@
                             <iframe class="embed-responsive-item" src="" id="video" allowscriptaccess="always" allow="autoplay" allowfullscreen="allowfullscreen"></iframe>
                         </div>
                         <br>
-                        <button id="prevClip" type="button" class="btn btn-primary"> <<< </button>
-                        <button id="nextClip" type="button" class="btn btn-primary"> >>> </button>
-                        <div class="float-right"><button id="reachThePlace" type="button" class="btn btn-danger">Raggiungi il luogo</button></div>
+                        <button id="prevClip" type="button" class="btn btn-primary"> <i class="far fa-arrow-alt-circle-left"></i> </button>
+                        <button id="nextClip" type="button" class="btn btn-primary"> <i class="far fa-arrow-alt-circle-right"></i> </button>
+                        <div class="float-right"><button id="reachThePlace" type="button" class="btn btn-danger">Raggiungi <i class="fas fa-map-marker-alt"></i></button></div>
+                        <br>
                         <br>
                         <form>
-                            <label>Filtra clip per:  (what default)</label>
-                            <select id="filtra" class="filterPurpose" name="filtra">
+                        <div class="form-group">
+                            <label>Filtra clip per scopo (what default):</label>
+                            <select id="filtra" class="filterPurpose form-control" name="filtra">
                                 <option selected="selected" value="what">What</option>
                                 <option value="how">How</option>
                                 <option value="why">Why</option>
                             </select>
-                        </fomr>
-                        <br>
+                        </div>
+                        </form>
+                        <form>
+                        <div class="form-group">
+                            <label>Filtra clip per lingua (ita default):</label>
+                            <select id="filtraLan" class="filterLan form-control" name="filtraLan">
+                                <option selected="selected" value="ita">Ita</option>
+                                <option value="eng">Eng</option>
+                                <option value="deu">Deu</option>
+                                <option value="fra">Fra</option>
+                                <option value="esp">Esp</option>
+                            </select>
+                        </div>
+                        </form>
                         <div>
-                            <button id="btnPrev" type="button" class="btn btn-primary" onclick="prevRoute()"> <<< Luogo precedente</button>
-                            <button id="btnNext" type="button" class="btn btn-primary" onclick="nextRoute()">Prossimo luogo >>> </button>
+                            <button id="btnPrev" type="button" class="btn btn-primary" onclick="prevRoute()"> <i class="fas fa-angle-left"></i> Luogo precedente</button>
+                            <button id="btnNext" type="button" class="btn btn-primary" onclick="nextRoute()">Prossimo luogo <i class="fas fa-angle-right"></i> </button>
                         </div>
                     </div>
                 </div>

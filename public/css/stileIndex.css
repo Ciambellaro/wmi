@@ -51,6 +51,25 @@
     visibility: visible;
 }
 
+#prevClip {
+    height: 35px;
+    width: 60px;
+    padding: 0px;
+    font-size: 20px;
+}
+
+#nextClip {
+    height: 35px;
+    width: 60px;
+    padding: 0px;
+    font-size: 20px;
+}
+
+#reachThePlace{
+    padding: 4px;
+    height: 35px;
+}
+
 #btPop {
     font-size: 13px;
     width: 50px;

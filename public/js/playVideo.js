@@ -1,10 +1,10 @@
 var idVideo;
-var whatVideo = [];
-var howVideo = [];
-var whyVideo = [];
+var filterPurpose;
+var filterLan;
 var pos
+var lista = [];
 
-function getJson(p,flag) {  // richiesta alla API YTSearch
+function getJson(p, flag) {  // richiesta alla API YTSearch
   $.ajax({
     type: "GET",
     dataType: "json",
@@ -15,24 +15,14 @@ function getJson(p,flag) {  // richiesta alla API YTSearch
       var numResults = jsonList.pageInfo.totalResults;
       if (numResults > 0) {
         for (var i = 0; i < numResults; i++) {
-          var split = jsonList.items[i].snippet.description.split(":");
-          var purpose = split[1];
-          switch (purpose) {
-            case "how":
-              howVideo.push(jsonList.items[i].id.videoId);
-              break;
-            case "why":
-              whyVideo.push(jsonList.items[i].id.videoId);
-              break;
-            default:
-              whatVideo.push(jsonList.items[i].id.videoId);
-          }
+          lista.push(jsonList.items[i].snippet.description + "#" + jsonList.items[i].id.videoId);
         }
+        console.log(lista);
         play(); // fa partire effettivamente il video
-      } else if( numResults == 0 &&  flag != true){
+      } else if (numResults == 0 && flag != true) {
         $('#noCLipModal').modal('show');
       }
-      
+
     }
   })
 }
@@ -41,13 +31,22 @@ function getJson(p,flag) {  // richiesta alla API YTSearch
 function play() {
   var index = 0;
   var $videoSrc;
-  var list = whatVideo;  // di default i video visualizzati sono i WHAT
-  $videoSrc = "https://www.youtube.com/embed/" + list[index];
+  var tmpList = [];
+  filterPurpose = "what";
+  filterLan = "ita";
+  for (var i = 0; i < lista.length; i++) { // di default i video visualizzati sono i WHAT e ITA
+    var split = lista[i].split(":");
+    var s = lista[i].split("#");
+    if (split[1] == filterPurpose && split[2] == filterLan) {
+      tmpList.push(s[1]);
+    }
+  }
+  $videoSrc = "https://www.youtube.com/embed/" + tmpList[index];
 
-  if(activeRoute == false){
+  if (activeRoute == false) {
     document.getElementById("btnPrev").style.visibility = "hidden";
     document.getElementById("btnNext").style.visibility = "hidden";
-  } else{
+  } else {
     document.getElementById("btnPrev").style.visibility = "visible";
     document.getElementById("btnNext").style.visibility = "visible";
   }
@@ -57,25 +56,76 @@ function play() {
     $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");  // set the video src to autoplay and not to show related video.
   });
 
-  // CAMBIA LA LISTA DA CUI IFRAME PRENDE I VIDEO 
+  // CAMBIA LA LISTA DA CUI IFRAME PRENDE I VIDEO FILTRATA PER SCOPO
   $("select.filterPurpose").change(function () {
     var selectedPurpose = $(this).children("option:selected").val();
-    console.log("Filtra per: " + selectedPurpose);
+    tmpList = [];
+    console.log("FILTERLAN PRIMA: " + filterLan);
     switch (selectedPurpose) {
       case "how":
-        list = howVideo;
+        filterPurpose = "how";
         index = 0;
         break;
       case "why":
-        list = whyVideo;
+        filterPurpose = "why";
         index = 0;
         break;
       default:
-        list = whatVideo;
+        filterPurpose = "what";
         index = 0;
     }
 
-    $videoSrc = "https://www.youtube.com/embed/" + list[index]; //aggiorna il link con il primo video della lista filtrata
+    for (var i = 0; i < lista.length; i++) {
+      var split = lista[i].split(":");
+      var s = lista[i].split("#");
+      if (split[1] == filterPurpose && split[2] == filterLan) {
+        tmpList.push(s[1]);
+      }
+
+    }
+    $videoSrc = "https://www.youtube.com/embed/" + tmpList[index]; //aggiorna il link con il primo video della lista filtrata
+    $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+  });
+
+  // CAMBIA LA LISTA DA CUI IFRAME PRENDE I VIDEO FILTRATA PER SCOPO
+  $("select.filterLan").change(function () {
+    var selectedPurpose = $(this).children("option:selected").val();
+    console.log("Filtra per: " + filterLan);
+    console.log("FILTERLAN PRIMA: " + filterLan);
+    tmpList = [];
+    switch (selectedPurpose) {
+      case "eng":
+        filterLan = "eng";
+        index = 0;
+        break;
+      case "deu":
+        filterLan = "deu";
+        index = 0;
+        break;
+      case "fra":
+        filterLan = "fra";
+        index = 0;
+        break;
+      case "esp":
+        filterLan = "esp";
+        index = 0;
+        break;
+      default:
+        filterLan = "ita";
+        index = 0;
+    }
+
+    console.log("FILTERLAN DOPO: " + filterLan);
+
+    for (var i = 0; i < lista.length; i++) {
+      var split = lista[i].split(":");
+      var s = lista[i].split("#");
+      if (split[1] == filterPurpose && split[2] == filterLan) {
+        tmpList.push(s[1]);
+      }
+
+    }
+    $videoSrc = "https://www.youtube.com/embed/" + tmpList[index]; //aggiorna il link con il primo video della lista filtrata
     $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
   });
 
@@ -84,23 +134,23 @@ function play() {
       alert("Questa è la prima clip !");
     } else {
       index--;
-      $videoSrc = "https://www.youtube.com/embed/" + list[index];
+      $videoSrc = "https://www.youtube.com/embed/" + tmpList[index];
       $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
     }
   });
 
   $('#nextClip').click(function () {
-    console.log("Index: "+ index+"List dim: "+list.length);
-    if(index+1  < list.length) {
+    console.log("Index: " + index + "List dim: " + tmpList.length);
+    if (index + 1 < tmpList.length) {
       index++;
-      $videoSrc = "https://www.youtube.com/embed/" + list[index];
+      $videoSrc = "https://www.youtube.com/embed/" + tmpList[index];
       $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
     } else {
       alert("Questa è l'ultima clip !");
     }
   });
 
-  $('#reachThePlace').click(function() {
+  $('#reachThePlace').click(function () {
     $('#ModalVideoPlayer').modal('hide');
     if (currentRoute) {  //per rimuovere rettangolo bianco delle indicazioni stradali, se c'è
       currentRoute.setWaypoints([]);
@@ -114,8 +164,8 @@ function play() {
     routes.push(meta);
     currentRoute = L.Routing.control({
       waypoints: routes,
-      createMarker: function() {
-       return null;
+      createMarker: function () {
+        return null;
       }
     }).addTo(map);
     activeRoute = true;
