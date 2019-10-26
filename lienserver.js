@@ -51,7 +51,7 @@ app.get('/', lien => {
     lien.file(`${__dirname}/login.html`);
 });
 
-app.post('/', lien => {
+app.post('/login', lien => {
     // gestione form accedi
     var usernameLogin = "";
     var passwordLogin = "";
@@ -68,10 +68,12 @@ app.post('/', lien => {
             if (err) throw err;
             if(result == ""){
                 console.log("USERNAME ERRATO");
+                lien.redirect("/");
             } else if(passwordLogin == result[0].password){
-                lien.redirect("/map");;
+                lien.redirect("/map");
             } else {
                 console.log("PASSWORD ERRATA");
+                lien.redirect("/");
             }
             db.close();
         });
@@ -109,10 +111,6 @@ app.post('/registrazione', lien => {
                 });
             } else if(result != ""){
                 console.log(" ########### UTENTE GIA' ESISTENTE ! ##############");
-                var obj = "ERRORE CLIENT!";
-                var j = JSON.stringify(obj);
-                console.log("JSON:" + j);
-                lien.res.json(j);
             }
             db.close();
         });
