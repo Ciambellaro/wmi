@@ -1,7 +1,3 @@
-//apertura modal al caricamento della pagina
-$(window).on('load', function () {
-    $('#modalLoginForm').modal({ backdrop: 'static', keyboard: false });
-});
 
 //se le credenziali sono giuste, avviare la mappa
 function login() {
@@ -20,7 +16,8 @@ function login() {
 
 //apre il modale per la registrazione
 function openModalsignin() {
-    $('#modalRegisterForm').modal('show');
+    //$('#modalRegisterForm').modal('show');
+    location.assign("/registrazione");
 }
 
 
