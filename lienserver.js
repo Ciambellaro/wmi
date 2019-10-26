@@ -46,15 +46,43 @@ app.on("load", function (err) {
     err && process.exit(1);
 });
 
-// Add page
-//app.get("/", `${__dirname}/login.html`);
 app.get('/', lien => {
     access = 0;
     lien.file(`${__dirname}/login.html`);
 });
 
 app.post('/', lien => {
+    // gestione form accedi
+    var usernameLogin = "";
+    var passwordLogin = "";
+    usernameLogin = lien.req.body.userLogin;
+    passwordLogin = lien.req.body.pwdLogin;
 
+    mongo.connect(url, function (err, db) {
+        if (err) throw err;
+        var dbo = db.db("registrazioni");
+
+        console.log("LOGIN: " + usernameLogin + " " + passwordLogin);
+        var queryLogin = { username: usernameLogin };
+        dbo.collection("registrazioni").find(queryLogin).toArray(function (err, result) {
+            if (err) throw err;
+            if(result == ""){
+                console.log("USERNAME ERRATO");
+            } else if(passwordLogin == result[0].password){
+                lien.redirect("/map");;
+            } else {
+                console.log("PASSWORD ERRATA");
+            }
+            db.close();
+        });
+    });
+});
+
+app.get('/registrazione', lien => {
+    lien.file(`${__dirname}/registrazione.html`);
+});
+
+app.post('/registrazione', lien => {
     // gestione form registrati
     var user = "";
     var pwd = "";
@@ -64,58 +92,31 @@ app.post('/', lien => {
     tipo = lien.req.body.tipologia;
     console.log("### " + user + " " + pwd + " " + tipo);
 
-    var dbo = db.db("registrazioni");
-
-    if(user != null && pwd != null && tipo != null){
-        mongo.connect(url, function (err, db) {
-            if (err) throw err;
-            
-            var control = { username: user };
-            dbo.collection("registrazioni").find(control).toArray(function (err, result) {
-                if (err) throw err;
-                console.log("RESULT CONTROL:" + result);
-                if (result == "") {
-                    var myobj = { username: user, password: pwd, tipologia: tipo };
-                    dbo.collection("registrazioni").insertOne(myobj, function (err, res) {
-                        if (err) throw err;
-                        console.log("inserito utente");
-                        console.log("Username: " + myobj.username + " " + "Password: " + myobj.password + " " + "Tipologia: " + myobj.tipologia);
-                        db.close();
-                        lien.redirect("/");
-                    });
-                } else {
-                    console.log(" ########### UTENTE GIA' ESISTENTE ! ##############");
-                }
-                db.close();
-            });
-    
-            var query = { username: user };
-            dbo.collection("registrazioni").find().toArray(function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                db.close();
-            });
-        });
-        
-    }
-    
-
-    // gestione form accedi
-    var usernameLogin = "";
-    var passwordLogin = "";
-    usernameLogin = lien.req.body.userLogin;
-    passwordLogin = lien.req.body.pwdLogin;
-
-    console.log("### " + usernameLogin + " " + passwordLogin);
-    var queryLogin = { username: user };
-    dbo.collection("registrazioni").find(queryLogin).toArray(function (err, result) {
+    mongo.connect(url, function (err, db) {
         if (err) throw err;
-        console.log("@@@@ " + result.password);
-        db.close();
+        var dbo = db.db("registrazioni");
+        var control = { username: user };
+        dbo.collection("registrazioni").find(control).toArray(function (err, result) {
+            if (err) throw err;
+            if (result == "") {
+                var myobj = { username: user, password: pwd, tipologia: tipo };
+                dbo.collection("registrazioni").insertOne(myobj, function (err, res) {
+                    if (err) throw err;
+                    console.log("inserito utente");
+                    console.log("Username: " + myobj.username + " " + "Password: " + myobj.password + " " + "Tipologia: " + myobj.tipologia);
+                    db.close();
+                    lien.redirect("/");
+                });
+            } else if(result != ""){
+                console.log(" ########### UTENTE GIA' ESISTENTE ! ##############");
+                var obj = "ERRORE CLIENT!";
+                var j = JSON.stringify(obj);
+                console.log("JSON:" + j);
+                lien.res.json(j);
+            }
+            db.close();
+        });
     });
-
-
-
 });
 
 app.get('/map', lien => {
