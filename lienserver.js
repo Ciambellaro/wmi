@@ -66,10 +66,10 @@ app.post('/login', lien => {
         var queryLogin = { username: usernameLogin };
         dbo.collection("registrazioni").find(queryLogin).toArray(function (err, result) {
             if (err) throw err;
-            if(result == ""){
+            if (result == "") {
                 console.log("USERNAME ERRATO");
                 lien.redirect("/");
-            } else if(passwordLogin == result[0].password){
+            } else if (passwordLogin == result[0].password) {
                 lien.redirect("/map");
             } else {
                 console.log("PASSWORD ERRATA");
@@ -86,31 +86,45 @@ app.get('/registrazione', lien => {
 
 app.post('/registrazione', lien => {
     // gestione form registrati
-    var user = "";
+    var usern = "";
     var pwd = "";
+    var pwdConf = "";
     var tipo = "";
-    user = lien.req.body.username;
+    var esisteGia = false;
+    usern = lien.req.body.user;
     pwd = lien.req.body.pass;
+    pwdConf = lien.req.body.passConf;
     tipo = lien.req.body.tipologia;
-    console.log("### " + user + " " + pwd + " " + tipo);
+    console.log("**** USERNAME: " + usern + ", PASSWORD: " + pwd + ", CONFERMA: " + pwdConf + ", TIPOLOGIA: " + tipo + " ****");
 
     mongo.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("registrazioni");
-        var control = { username: user };
-        dbo.collection("registrazioni").find(control).toArray(function (err, result) {
+        
+        /*dbo.collection("registrazioni").find({}).toArray(function (err, result) {
             if (err) throw err;
-            if (result == "") {
-                var myobj = { username: user, password: pwd, tipologia: tipo };
-                dbo.collection("registrazioni").insertOne(myobj, function (err, res) {
-                    if (err) throw err;
-                    console.log("inserito utente");
-                    console.log("Username: " + myobj.username + " " + "Password: " + myobj.password + " " + "Tipologia: " + myobj.tipologia);
-                    db.close();
-                    lien.redirect("/");
-                });
-            } else if(result != ""){
-                console.log(" ########### UTENTE GIA' ESISTENTE ! ##############");
+            console.log(result);
+            db.close();
+        });*/
+
+        var control = { username: usern };
+        dbo.collection("registrazioni").find(control).toArray(function (err, result) { // cerca nel db utenti con username inserito
+            if (err) throw err;
+            if (result.length > 0) esisteGia = true;  //esiste già un utente con quel username?
+            if (esisteGia == false) {  //se non esiste
+                if (pwd == pwdConf) {  //conferma pwd va bene?
+                    var myobj = { username: usern, password: pwd, tipologia: tipo };
+                    dbo.collection("registrazioni").insertOne(myobj, function (err, res) {  //aggiungilo
+                        if (err) throw err;
+                        console.log("UTENTE INSERITO[ Username: " + myobj.username + ", Password: " + myobj.password + ", Tipologia: " + myobj.tipologia + " ]");
+                        db.close();
+                        lien.redirect("/");
+                    });
+                } else {
+                    console.log("Errore nel confermare la password");
+                }
+            } else {
+                console.log(" ########### UTENTE GIA' ESISTENTE! ##############");
             }
             db.close();
         });
