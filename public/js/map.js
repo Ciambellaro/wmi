@@ -5,6 +5,7 @@
 var OSM_layer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png',
 {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'}).addTo(map);
 */
+
 var map = L.map('map').fitWorld();
 var layerGroup = L.layerGroup().addTo(map);
 var layerGroupTMP = L.layerGroup().addTo(map);
@@ -27,6 +28,22 @@ var discovered = [];
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoiaXBlenp1IiwiYSI6ImNrMG54Ym1rZjA0OWszbm8weTlyNGlnd3cifQ.Ra3q6EDY1jvEeGFFcFHdAQ'
 }).addTo(map);*/
+
+
+$(document).ready(function(){
+    $.getJSON('log.json', function(json) {
+        document.getElementById("tipoDiUser").innerHTML = "USERNAME: " + json.username;
+        if(json.tipologia == "turista") {
+            document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come TURISTA";
+            document.getElementById("ClipDiv").innerHTML = "";
+        } else {
+            document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come GUIDA";
+            document.getElementById("listDD").innerHTML = "";
+            document.getElementById("RouteDiv").innerHTML = "";
+        }
+    });
+});
+
 
 L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
     attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',

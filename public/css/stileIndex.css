@@ -82,23 +82,28 @@
     text-align: center;
 }
 
-#dropdownMenuButton {
+#dropdownMenuButton {  /*bottone blu sulla mappa*/
     position: absolute;
     top: 40px;
     right: 40px;
 }
 
-#dropDownLogout {
+#dropDownLogout {  /*menu dropdown per il logout*/
     width: 250px;
-    height: 100px;
+    height: 145px;
     text-align: center;
 }
 
-.dropdown-divider {
+.dropdown-divider {  /*nel dropdown menu, la linea di divisione*/
     margin: 10px;
 }
 
-#tipoDiAccesso {
+#tipoDiAccesso {  /*nel dropdown menu, dove viene visualizzato "Accesso effettuato come ..."*/
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#tipoDiUser {  /*nel dropdown menu, dove viene visualizzato "USERNAME: blabla"*/
     margin-top: 10px;
     margin-bottom: 10px;
 }

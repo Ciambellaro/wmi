@@ -55,6 +55,8 @@
                         <i class="glyphicon glyphicon glyphicon-user" id="loginIcon"></i>
                     </button>
                     <div id="dropDownLogout" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <p id="tipoDiUser"></p>
+                        <div class="dropdown-divider"></div>
                         <p id="tipoDiAccesso"></p>
                         <div class="dropdown-divider"></div>
                         <button type="button" class="btn btn-info" onclick="backToLogin()">Esci</button>
@@ -255,27 +257,6 @@
 </body>
 
 <script>
-    if (sessionStorage.getItem('toPass') == 'adm') { //carica la modilità 'crea clip' solo se sei un creator
-        /*$(document).ready(function () {
-            $("#ClipDiv").append('<button type="button" class="btn btn-warning btn-circle btn-lg" id="createClip" onClick="addClip() " title="Aggiungi clip"><i class="glyphicon glyphicon-forward" id="clipIcon"></i></button>');
-        });*/
-        document.getElementById("RouteDiv").innerHTML = "";
-        document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come GUIDA";
-        /*document.getElementById("createRoute").disabled = true;
-        document.getElementById("createRoute").style.background = "none";
-        document.getElementById("createRoute").style.border = "none";*/
-
-    } else if (sessionStorage.getItem('toPass') == 'usr') { //carica la modilità 'crea percorso' solo se sei un turista
-        /*$(document).ready(function () {
-            $("#RouteDiv").append('<button type="button" class="btn btn-warning btn-circle btn-lg" id="createRoute" onClick="addRoute() " title="Crea un percorso"><i class="glyphicon glyphicon-road" id="routeIcon"></i></button>');
-        });*/
-        document.getElementById("ClipDiv").innerHTML = "";
-        document.getElementById("tipoDiAccesso").innerHTML = "Accesso effettuato come TURISTA";
-        /*document.getElementById("createRoute").disabled = true;
-        document.getElementById("createRoute").style.background = "none";
-        document.getElementById("createRoute").style.border = "none";*/
-    }
-
     function crea() {
         window.location.assign("/auth");
     }

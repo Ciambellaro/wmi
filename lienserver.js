@@ -1,15 +1,16 @@
 // Dependencies
 const Youtube = require("youtube-api")
-fs = require('fs'),
+    fs = require('fs'),
     readJson = require("r-json"),
     Lien = require("lien"),
     Logger = require("bug-killer"),
     opn = require("opn"),
     prettyBytes = require("pretty-bytes");
-mongo = require('mongodb').MongoClient;
 
+const mongo = require('mongodb').MongoClient;
 const url = "mongodb://localhost:27017/";
 
+var cookie = require('cookie');
 var express = require('express');
 var app = express();
 var multer = require('multer');
@@ -51,6 +52,14 @@ app.get('/', lien => {
     lien.file(`${__dirname}/login.html`);
 });
 
+
+//per leggere il file json del login
+app.get('/log.json', lien => {
+    lien.file(`${__dirname}/log.json`);
+});
+
+
+
 app.post('/login', lien => {
     // gestione form accedi
     var usernameLogin = "";
@@ -70,6 +79,17 @@ app.post('/login', lien => {
                 console.log("USERNAME ERRATO");
                 lien.redirect("/");
             } else if (passwordLogin == result[0].password) {
+                //scrive su un file json chi sta accedendo
+                let obj = { 
+                    username: result[0].username,
+                    password: result[0].password, 
+                    tipologia: result[0].tipologia
+                };
+                let data = JSON.stringify(obj);
+                fs.writeFile('log.json', data, (err) => {
+                    if (err) throw err;
+                });
+
                 lien.redirect("/map");
             } else {
                 console.log("PASSWORD ERRATA");
